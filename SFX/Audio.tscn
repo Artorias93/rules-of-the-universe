@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Utility/Audio.gd" type="Script" id=1]
+
+[node name="Audio" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+volume_db = -12.0
+autoplay = true
+
+[node name="Effects" type="AudioStreamPlayer" parent="."]
+volume_db = -12.0

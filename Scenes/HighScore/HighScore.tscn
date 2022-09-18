@@ -1,0 +1,860 @@
+[gd_scene load_steps=20 format=2]
+
+[ext_resource path="res://Scenes/HighScore/HighScore.gd" type="Script" id=1]
+[ext_resource path="res://Utility/Background.jpg" type="Texture" id=2]
+[ext_resource path="res://Utility/RUth.tres" type="Theme" id=3]
+[ext_resource path="res://Fonts/RobotoCondensed-Bold.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://Utility/Fade-Out.tres" type="Animation" id=5]
+[ext_resource path="res://Utility/Fade-In.tres" type="Animation" id=6]
+[ext_resource path="res://Scenes/HighScore/Classifica(2).png" type="Texture" id=7]
+[ext_resource path="res://Scenes/SexChoise/Indietro.gd" type="Script" id=8]
+[ext_resource path="res://Scenes/HighScore/Classifica(Go).png" type="Texture" id=9]
+[ext_resource path="res://Scenes/HighScore/Classifica(3).png" type="Texture" id=11]
+[ext_resource path="res://Scenes/HighScore/Classifica(1).png" type="Texture" id=12]
+[ext_resource path="res://Scenes/HighScore/Classifica.png" type="Texture" id=13]
+
+[sub_resource type="DynamicFont" id=1]
+size = 45
+outline_size = 3
+outline_color = Color( 0, 0, 0, 1 )
+extra_spacing_char = 3
+font_data = ExtResource( 4 )
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 13 ), ExtResource( 9 ) ],
+"loop": true,
+"name": "Start",
+"speed": 2.0
+} ]
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 12 ), ExtResource( 7 ), ExtResource( 11 ) ],
+"loop": true,
+"name": "Start",
+"speed": 2.0
+} ]
+
+[sub_resource type="StyleBoxFlat" id=4]
+content_margin_left = 0.0
+content_margin_right = 0.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 15
+border_width_top = 15
+border_width_right = 15
+border_width_bottom = 15
+border_color = Color( 0.74902, 0, 0.733333, 1 )
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="DynamicFont" id=5]
+size = 60
+outline_size = 3
+font_data = ExtResource( 4 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+content_margin_left = 0.0
+content_margin_right = 0.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color( 0.74902, 0, 0.733333, 1 )
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="DynamicFont" id=7]
+size = 45
+outline_size = 1
+font_data = ExtResource( 4 )
+
+[node name="Base" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 540, 960 )
+scale = Vector2( 1.6875, 1.68717 )
+texture = ExtResource( 2 )
+
+[node name="Indietro" type="Button" parent="."]
+margin_left = 390.0
+margin_top = 1756.0
+margin_right = 690.0
+margin_bottom = 1876.0
+rect_pivot_offset = Vector2( 150, 60 )
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme = ExtResource( 3 )
+custom_fonts/font = SubResource( 1 )
+action_mode = 0
+enabled_focus_mode = 0
+text = "INDIETRO"
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScoreTab" type="Label" parent="."]
+margin_left = 65.0
+margin_top = 220.0
+margin_right = 1015.0
+margin_bottom = 1700.0
+rect_pivot_offset = Vector2( 475, 740 )
+theme = ExtResource( 3 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Classifica" type="AnimatedSprite" parent="."]
+position = Vector2( 540, 140 )
+scale = Vector2( 0.6, 0.6 )
+frames = SubResource( 2 )
+animation = "Start"
+
+[node name="Roof" type="AnimatedSprite" parent="."]
+position = Vector2( 540, 120 )
+scale = Vector2( 0.6, 0.6 )
+frames = SubResource( 3 )
+animation = "Start"
+
+[node name="Griglia" type="VBoxContainer" parent="."]
+margin_left = 115.0
+margin_top = 267.5
+margin_right = 965.0
+margin_bottom = 1652.5
+alignment = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Etichette" type="HBoxContainer" parent="Griglia"]
+margin_top = 5.0
+margin_right = 850.0
+margin_bottom = 140.0
+alignment = 1
+
+[node name="Pos" type="Label" parent="Griglia/Etichette"]
+margin_left = 4.0
+margin_right = 184.0
+margin_bottom = 135.0
+rect_min_size = Vector2( 180, 135 )
+custom_styles/normal = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "POS."
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="Griglia/Etichette"]
+margin_left = 188.0
+margin_right = 428.0
+margin_bottom = 135.0
+rect_min_size = Vector2( 240, 135 )
+custom_styles/normal = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "PUNTI"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Age" type="Label" parent="Griglia/Etichette"]
+margin_left = 432.0
+margin_right = 642.0
+margin_bottom = 135.0
+rect_min_size = Vector2( 210, 135 )
+custom_styles/normal = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "ETÀ"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bias" type="Label" parent="Griglia/Etichette"]
+margin_left = 646.0
+margin_right = 846.0
+margin_bottom = 135.0
+rect_min_size = Vector2( 200, 135 )
+custom_styles/normal = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "BIAS"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Primo" type="HBoxContainer" parent="Griglia"]
+margin_top = 144.0
+margin_right = 850.0
+margin_bottom = 264.0
+alignment = 1
+
+[node name="Pos" type="Label" parent="Griglia/Primo"]
+margin_left = 4.0
+margin_right = 184.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 180, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "1°"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="Griglia/Primo"]
+margin_left = 188.0
+margin_right = 428.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 240, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Age" type="Label" parent="Griglia/Primo"]
+margin_left = 432.0
+margin_right = 642.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 210, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bias" type="Label" parent="Griglia/Primo"]
+margin_left = 646.0
+margin_right = 846.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 200, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Secondo" type="HBoxContainer" parent="Griglia"]
+margin_top = 268.0
+margin_right = 850.0
+margin_bottom = 388.0
+alignment = 1
+
+[node name="Pos" type="Label" parent="Griglia/Secondo"]
+margin_left = 4.0
+margin_right = 184.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 180, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "2°"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="Griglia/Secondo"]
+margin_left = 188.0
+margin_right = 428.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 240, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Age" type="Label" parent="Griglia/Secondo"]
+margin_left = 432.0
+margin_right = 642.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 210, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bias" type="Label" parent="Griglia/Secondo"]
+margin_left = 646.0
+margin_right = 846.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 200, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Terzo" type="HBoxContainer" parent="Griglia"]
+margin_top = 392.0
+margin_right = 850.0
+margin_bottom = 512.0
+alignment = 1
+
+[node name="Pos" type="Label" parent="Griglia/Terzo"]
+margin_left = 4.0
+margin_right = 184.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 180, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "3°"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="Griglia/Terzo"]
+margin_left = 188.0
+margin_right = 428.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 240, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Age" type="Label" parent="Griglia/Terzo"]
+margin_left = 432.0
+margin_right = 642.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 210, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bias" type="Label" parent="Griglia/Terzo"]
+margin_left = 646.0
+margin_right = 846.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 200, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Quarto" type="HBoxContainer" parent="Griglia"]
+margin_top = 516.0
+margin_right = 850.0
+margin_bottom = 636.0
+alignment = 1
+
+[node name="Pos" type="Label" parent="Griglia/Quarto"]
+margin_left = 4.0
+margin_right = 184.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 180, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "4°"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="Griglia/Quarto"]
+margin_left = 188.0
+margin_right = 428.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 240, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Age" type="Label" parent="Griglia/Quarto"]
+margin_left = 432.0
+margin_right = 642.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 210, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bias" type="Label" parent="Griglia/Quarto"]
+margin_left = 646.0
+margin_right = 846.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 200, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Quinto" type="HBoxContainer" parent="Griglia"]
+margin_top = 640.0
+margin_right = 850.0
+margin_bottom = 760.0
+alignment = 1
+
+[node name="Pos" type="Label" parent="Griglia/Quinto"]
+margin_left = 4.0
+margin_right = 184.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 180, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "5°"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="Griglia/Quinto"]
+margin_left = 188.0
+margin_right = 428.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 240, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Age" type="Label" parent="Griglia/Quinto"]
+margin_left = 432.0
+margin_right = 642.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 210, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bias" type="Label" parent="Griglia/Quinto"]
+margin_left = 646.0
+margin_right = 846.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 200, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Sesto" type="HBoxContainer" parent="Griglia"]
+margin_top = 764.0
+margin_right = 850.0
+margin_bottom = 884.0
+alignment = 1
+
+[node name="Pos" type="Label" parent="Griglia/Sesto"]
+margin_left = 4.0
+margin_right = 184.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 180, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "6°"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="Griglia/Sesto"]
+margin_left = 188.0
+margin_right = 428.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 240, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Age" type="Label" parent="Griglia/Sesto"]
+margin_left = 432.0
+margin_right = 642.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 210, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bias" type="Label" parent="Griglia/Sesto"]
+margin_left = 646.0
+margin_right = 846.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 200, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Settimo" type="HBoxContainer" parent="Griglia"]
+margin_top = 888.0
+margin_right = 850.0
+margin_bottom = 1008.0
+alignment = 1
+
+[node name="Pos" type="Label" parent="Griglia/Settimo"]
+margin_left = 4.0
+margin_right = 184.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 180, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "7°"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="Griglia/Settimo"]
+margin_left = 188.0
+margin_right = 428.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 240, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Age" type="Label" parent="Griglia/Settimo"]
+margin_left = 432.0
+margin_right = 642.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 210, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bias" type="Label" parent="Griglia/Settimo"]
+margin_left = 646.0
+margin_right = 846.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 200, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Ottavo" type="HBoxContainer" parent="Griglia"]
+margin_top = 1012.0
+margin_right = 850.0
+margin_bottom = 1132.0
+alignment = 1
+
+[node name="Pos" type="Label" parent="Griglia/Ottavo"]
+margin_left = 4.0
+margin_right = 184.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 180, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "8°"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="Griglia/Ottavo"]
+margin_left = 188.0
+margin_right = 428.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 240, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Age" type="Label" parent="Griglia/Ottavo"]
+margin_left = 432.0
+margin_right = 642.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 210, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bias" type="Label" parent="Griglia/Ottavo"]
+margin_left = 646.0
+margin_right = 846.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 200, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Nono" type="HBoxContainer" parent="Griglia"]
+margin_top = 1136.0
+margin_right = 850.0
+margin_bottom = 1256.0
+alignment = 1
+
+[node name="Pos" type="Label" parent="Griglia/Nono"]
+margin_left = 4.0
+margin_right = 184.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 180, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "9°"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="Griglia/Nono"]
+margin_left = 188.0
+margin_right = 428.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 240, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Age" type="Label" parent="Griglia/Nono"]
+margin_left = 432.0
+margin_right = 642.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 210, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bias" type="Label" parent="Griglia/Nono"]
+margin_left = 646.0
+margin_right = 846.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 200, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Decimo" type="HBoxContainer" parent="Griglia"]
+margin_top = 1260.0
+margin_right = 850.0
+margin_bottom = 1380.0
+alignment = 1
+
+[node name="Pos" type="Label" parent="Griglia/Decimo"]
+margin_left = 4.0
+margin_right = 184.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 180, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "10°"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="Griglia/Decimo"]
+margin_left = 188.0
+margin_right = 428.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 240, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Age" type="Label" parent="Griglia/Decimo"]
+margin_left = 432.0
+margin_right = 642.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 210, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bias" type="Label" parent="Griglia/Decimo"]
+margin_left = 646.0
+margin_right = 846.0
+margin_bottom = 120.0
+rect_min_size = Vector2( 200, 120 )
+custom_styles/normal = SubResource( 6 )
+custom_fonts/font = SubResource( 7 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ColorRect"]
+anims/Fade-In = ExtResource( 6 )
+anims/Fade-Out = ExtResource( 5 )
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+[connection signal="gui_input" from="Indietro" to="Indietro" method="_on_Indietro_gui_input"]
+[connection signal="animation_finished" from="ColorRect/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

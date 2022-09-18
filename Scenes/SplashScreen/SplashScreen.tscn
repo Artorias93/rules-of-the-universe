@@ -1,0 +1,70 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://Utility/Fade-In(BA).tres" type="Animation" id=2]
+[ext_resource path="res://Utility/BankItalia.png" type="Texture" id=3]
+[ext_resource path="res://Utility/GameLab.png" type="Texture" id=4]
+[ext_resource path="res://Utility/Sapienza.png" type="Texture" id=5]
+[ext_resource path="res://Utility/Fade-Out(AB).tres" type="Animation" id=6]
+[ext_resource path="res://Utility/Logo Team.png" type="Texture" id=7]
+[ext_resource path="res://Scenes/SplashScreen/SplashScreen.gd" type="Script" id=8]
+[ext_resource path="res://Utility/Fade-In.tres" type="Animation" id=9]
+[ext_resource path="res://Utility/Fade-Out(NB).tres" type="Animation" id=10]
+
+[node name="SplashScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ColorRect"]
+anims/Fade-Out(NB) = ExtResource( 10 )
+
+[node name="GameLab" type="Sprite" parent="."]
+position = Vector2( 540, 420 )
+scale = Vector2( 2.36, 2.36 )
+texture = ExtResource( 4 )
+
+[node name="BankItalia" type="Sprite" parent="."]
+position = Vector2( 540, 1480 )
+scale = Vector2( 0.316021, 0.316021 )
+texture = ExtResource( 3 )
+
+[node name="Sapienza" type="Sprite" parent="."]
+position = Vector2( 540, 960 )
+scale = Vector2( 0.784351, 0.784351 )
+texture = ExtResource( 5 )
+
+[node name="OrganizationXIII" type="Sprite" parent="."]
+visible = false
+position = Vector2( 540, 960 )
+scale = Vector2( 2.60286, 2.60286 )
+texture = ExtResource( 7 )
+
+[node name="ColorRect2" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer2" type="AnimationPlayer" parent="ColorRect2"]
+anims/Fade-In = ExtResource( 9 )
+anims/Fade-In(BA) = ExtResource( 2 )
+anims/Fade-Out(AB) = ExtResource( 6 )
+
+[node name="Timer" type="Timer" parent="ColorRect2"]
+one_shot = true
+[connection signal="animation_finished" from="ColorRect/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]
+[connection signal="animation_finished" from="ColorRect2/AnimationPlayer2" to="." method="_on_AnimationPlayer2_animation_finished"]

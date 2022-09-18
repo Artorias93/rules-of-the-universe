@@ -1,0 +1,337 @@
+[gd_scene load_steps=27 format=2]
+
+[ext_resource path="res://Scenes/Options/Options.gd" type="Script" id=1]
+[ext_resource path="res://Utility/Background.jpg" type="Texture" id=2]
+[ext_resource path="res://Utility/RUth.tres" type="Theme" id=3]
+[ext_resource path="res://Fonts/RobotoCondensed-Bold.ttf" type="DynamicFontData" id=4]
+[ext_resource path="res://Utility/Fade-Out.tres" type="Animation" id=5]
+[ext_resource path="res://Utility/Fade-In.tres" type="Animation" id=6]
+[ext_resource path="res://Scenes/MainMenu/Sat(1).png" type="Texture" id=7]
+[ext_resource path="res://Scenes/SexChoise/Indietro.gd" type="Script" id=8]
+[ext_resource path="res://Scenes/MainMenu/Sat(2).png" type="Texture" id=9]
+[ext_resource path="res://Scenes/Options/Options.png" type="Texture" id=10]
+[ext_resource path="res://Scenes/MainMenu/Sat(3).png" type="Texture" id=11]
+[ext_resource path="res://Scenes/Options/Earth.png" type="Texture" id=12]
+[ext_resource path="res://Scenes/Options/Earth2.png" type="Texture" id=13]
+[ext_resource path="res://Scenes/Options/Arrow.png" type="Texture" id=14]
+[ext_resource path="res://Scenes/Options/ToggleOn.png" type="Texture" id=15]
+[ext_resource path="res://Scenes/Options/ToggleOff.png" type="Texture" id=16]
+
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PoolVector2Array( -27.2649, 18.1766, 27.2649, -18.1766, 149.215, 178.086, -56.8855, 2.27207, 56.8855, -2.27207, 251.311, 145.777, -20.4487, -13.6324, 20.4487, 13.6324, 337.899, 163.87, 0, 0, 0, 0, 439.9, 254.701, 0, 0, 0, 0, 533.055, 341.04, 0, 0, 0, 0, 639.842, 429.651, 0, 0, 0, 0, 717.093, 511.445, -38.3544, -19.1981, 38.3544, 19.1981, 776.167, 568.247, -21.8664, 7.17066, 21.8664, -7.17066, 881.98, 585.052, -37.6455, 62.722, 37.6455, -62.722, 978.907, 502.341, 12.0274, 56.5728, -12.0274, -56.5728, 994.415, 295.69, 29.537, 29.537, -29.537, -29.537, 942.721, 189.717, 53.9463, 0, -53.9463, 0, 839.785, 157.002, 0, 0, 0, 0, 730.775, 192.176, 0, 0, 0, 0, 633.026, 268.334, 0, 0, 0, 0, 535.327, 370.577, 0, 0, 0, 0, 394.458, 488.725, 34.0811, -11.3604, -34.0811, 11.3604, 301.303, 561.431, 22.7207, 11.3604, -22.7207, -11.3604, 185.428, 556.887, 18.1766, 29.537, -18.1766, -29.537, 103.633, 486.453, 0, 22.7207, 0, -22.7207, 76.843, 379.693, -11.3604, 29.537, 11.3604, -29.537, 94.9359, 260.797, -24.9928, 31.809, 24.9928, -31.809, 149.215, 176.794 )
+}
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 7 ), ExtResource( 9 ), ExtResource( 11 ) ],
+"loop": true,
+"name": "Play",
+"speed": 3.0
+} ]
+
+[sub_resource type="DynamicFont" id=3]
+size = 45
+outline_size = 3
+outline_color = Color( 0, 0, 0, 1 )
+extra_spacing_char = 3
+font_data = ExtResource( 4 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+content_margin_left = 50.0
+content_margin_right = 40.0
+content_margin_top = 30.0
+content_margin_bottom = 30.0
+bg_color = Color( 1, 0.631373, 0.992157, 0.494118 )
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color( 1, 0.631373, 0.992157, 1 )
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="DynamicFont" id=5]
+size = 70
+outline_size = 5
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 4 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+content_margin_left = 40.0
+content_margin_right = 30.0
+content_margin_top = 30.0
+content_margin_bottom = 30.0
+bg_color = Color( 1, 0.470588, 0.988235, 0.784314 )
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color( 1, 0.631373, 0.992157, 1 )
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id=7]
+content_margin_left = 40.0
+content_margin_right = 30.0
+content_margin_top = 30.0
+content_margin_bottom = 30.0
+bg_color = Color( 1, 0.223529, 0.984314, 0.780392 )
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color( 1, 0.631373, 0.992157, 1 )
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="StyleBoxFlat" id=8]
+content_margin_left = 40.0
+content_margin_right = 30.0
+content_margin_top = 30.0
+content_margin_bottom = 30.0
+bg_color = Color( 1, 0.631373, 0.992157, 0.784314 )
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+border_color = Color( 1, 0.631373, 0.992157, 1 )
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+
+[sub_resource type="DynamicFont" id=9]
+size = 50
+outline_size = 5
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 4 )
+
+[sub_resource type="DynamicFont" id=10]
+size = 50
+outline_size = 5
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 4 )
+
+[node name="Base" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 540, 960 )
+scale = Vector2( 1.6875, 1.68717 )
+texture = ExtResource( 2 )
+
+[node name="Sat" type="Path2D" parent="."]
+position = Vector2( 0, 1152 )
+curve = SubResource( 1 )
+
+[node name="Sat" type="PathFollow2D" parent="Sat"]
+position = Vector2( 149.215, 178.086 )
+rotation = -0.593991
+rotate = false
+
+[node name="Sat" type="AnimatedSprite" parent="Sat/Sat"]
+rotation = 0.523599
+scale = Vector2( 0.5, 0.5 )
+frames = SubResource( 2 )
+animation = "Play"
+frame = 1
+playing = true
+
+[node name="Options" type="Sprite" parent="."]
+position = Vector2( 540, 144.75 )
+scale = Vector2( 0.589219, 0.589219 )
+texture = ExtResource( 10 )
+
+[node name="Indietro" type="Button" parent="."]
+margin_left = 390.0
+margin_top = 1756.0
+margin_right = 690.0
+margin_bottom = 1876.0
+rect_pivot_offset = Vector2( 150, 60 )
+focus_mode = 0
+mouse_default_cursor_shape = 2
+theme = ExtResource( 3 )
+custom_fonts/font = SubResource( 3 )
+action_mode = 0
+enabled_focus_mode = 0
+text = "INDIETRO"
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="VolumeEff" type="Label" parent="."]
+margin_left = 112.0
+margin_top = 608.0
+margin_right = 960.0
+margin_bottom = 872.0
+theme = ExtResource( 3 )
+custom_styles/normal = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 0.976471, 0.701961, 1, 1 )
+text = "Volume Effetti"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VolumeEff" type="HSlider" parent="VolumeEff"]
+margin_left = 48.0
+margin_top = 160.0
+margin_right = 808.0
+margin_bottom = 224.0
+focus_mode = 0
+custom_icons/grabber_highlight = ExtResource( 13 )
+custom_icons/grabber = ExtResource( 12 )
+max_value = 100.0
+value = 50.0
+scrollable = false
+tick_count = 5
+ticks_on_borders = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VolumeMus" type="Label" parent="."]
+margin_left = 112.0
+margin_top = 888.0
+margin_right = 960.0
+margin_bottom = 1152.0
+theme = ExtResource( 3 )
+custom_styles/normal = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 0.976471, 0.701961, 1, 1 )
+text = "Volume Musica"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="VolumeMus" type="HSlider" parent="VolumeMus"]
+margin_left = 48.0
+margin_top = 160.0
+margin_right = 808.0
+margin_bottom = 224.0
+focus_mode = 0
+custom_icons/grabber_highlight = ExtResource( 13 )
+custom_icons/grabber = ExtResource( 12 )
+max_value = 100.0
+value = 50.0
+scrollable = false
+tick_count = 5
+ticks_on_borders = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Lingua" type="Label" parent="."]
+margin_left = 112.0
+margin_top = 280.0
+margin_right = 960.0
+margin_bottom = 592.0
+theme = ExtResource( 3 )
+custom_styles/normal = SubResource( 4 )
+custom_fonts/font = SubResource( 5 )
+custom_colors/font_color = Color( 0.976471, 0.701961, 1, 1 )
+text = "Lingua"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Lingue" type="OptionButton" parent="Lingua"]
+margin_left = 48.0
+margin_top = 144.0
+margin_right = 808.0
+margin_bottom = 264.0
+focus_mode = 0
+theme = ExtResource( 3 )
+custom_icons/arrow = ExtResource( 14 )
+custom_styles/hover = SubResource( 6 )
+custom_styles/pressed = SubResource( 7 )
+custom_styles/focus = SubResource( 8 )
+custom_styles/normal = SubResource( 8 )
+custom_fonts/font = SubResource( 9 )
+custom_colors/font_color_disabled = Color( 0, 0, 0, 1 )
+enabled_focus_mode = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="MusEff" type="Label" parent="."]
+margin_left = 112.0
+margin_top = 1181.0
+margin_right = 960.0
+margin_bottom = 1312.0
+theme = ExtResource( 3 )
+custom_styles/normal = SubResource( 4 )
+custom_colors/font_color = Color( 0.976471, 0.701961, 1, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Musica" type="CheckButton" parent="MusEff"]
+margin_left = 16.0
+margin_top = 27.0
+margin_right = 344.0
+margin_bottom = 107.0
+focus_mode = 0
+theme = ExtResource( 3 )
+custom_icons/off = ExtResource( 16 )
+custom_icons/on = ExtResource( 15 )
+custom_fonts/font = SubResource( 10 )
+enabled_focus_mode = 0
+text = "Musica   "
+flat = true
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Effetti" type="CheckButton" parent="MusEff"]
+margin_left = 488.0
+margin_top = 27.0
+margin_right = 816.0
+margin_bottom = 107.0
+focus_mode = 0
+theme = ExtResource( 3 )
+custom_icons/off = ExtResource( 16 )
+custom_icons/on = ExtResource( 15 )
+custom_fonts/font = SubResource( 10 )
+enabled_focus_mode = 0
+text = "Effetti   "
+flat = true
+align = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="ColorRect"]
+anims/Fade-In = ExtResource( 6 )
+anims/Fade-Out = ExtResource( 5 )
+[connection signal="gui_input" from="Indietro" to="Indietro" method="_on_Indietro_gui_input"]
+[connection signal="value_changed" from="VolumeEff/VolumeEff" to="." method="_on_VolumeEff_value_changed"]
+[connection signal="value_changed" from="VolumeMus/VolumeMus" to="." method="_on_VolumeMus_value_changed"]
+[connection signal="gui_input" from="MusEff/Musica" to="." method="_on_Musica_gui_input"]
+[connection signal="gui_input" from="MusEff/Effetti" to="." method="_on_Effetti_gui_input"]
+[connection signal="animation_finished" from="ColorRect/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

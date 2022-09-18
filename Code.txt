@@ -1,0 +1,1617 @@
+##### AUDIO SCRIPT #####
+
+extends Control
+
+var ost = load("res://SFX/Theme.ogg")
+var game = load("res://SFX/Game.ogg")
+var slide = load("res://SFX/Slide.wav")
+var malus = load("res://SFX/Malus.wav")
+var bonus = load("res://SFX/Bonus.wav")
+var bias = load("res://SFX/Bias.wav")
+var lose = load("res://SFX/GameOver.wav")
+var win = load("res://SFX/Win.ogg")
+var choice = load("res://SFX/Choice.wav")
+
+func _ready():
+	play_music("ost")
+	
+
+func play_music(mus):
+	if mus == "ost":
+		$Music.stream = ost
+	if mus == "game":
+		$Music.stream = game
+	$Music.play()
+	
+
+func play_effects(sfx):
+	if sfx == "slide":
+		$Effects.stream = slide
+		$Effects.play()
+	if sfx == "malus":
+		$Effects.stream = malus
+		$Effects.play()
+	if sfx == "bonus":
+		$Effects.stream = bonus
+		$Effects.play()
+	if sfx == "bias":
+		$Effects.stream = bias
+		$Effects.play()
+	if sfx == "lose":
+		$Effects.stream = lose
+		$Effects.play()
+	if sfx == "win":
+		$Effects.stream = win
+		$Effects.play()
+	if sfx == "choice":
+		$Effects.stream = choice
+		$Effects.play()
+		
+func stop_sfx():
+	$Effects.stop()
+	
+	
+##### SCENE MANAGER SCRIPT #####
+
+extends Node
+
+var current_scene: Node = null
+
+
+func _ready():
+	# get the root node
+	var root = get_tree().get_root()
+	# save the current scene
+	current_scene = root.get_child(root.get_child_count() - 1)
+
+
+func goto_scene(path: String, params = null):
+	# full documentation here: http://docs.godotengine.org/en/3.0/getting_started/step_by_step/singletons_autoload.html
+	# Deleting the current scene at this point might be
+	# a bad idea, because it may be inside of a callback or function of it.
+	# The worst case will be a crash or unexpected behavior.
+	# The way around this is deferring the load to a later time
+	call_deferred("_deferred_goto_scene", path, params)
+
+
+func _deferred_goto_scene(path: String, params = null):
+	# Immediately free the current scene,
+	# there is no risk here.
+	current_scene.free()
+	# Load new scene
+	var s = ResourceLoader.load(path)
+	# Instance the new scene.
+	current_scene = s.instance()
+	# Add it to the active scene, as child of root.
+	get_tree().get_root().add_child(current_scene)
+	# Optional, to make it compatible with the SceneTree.change_scene() API.
+	get_tree().set_current_scene(current_scene)
+	if params:
+		current_scene.init(params)
+
+
+func add_node_to_scene(node):
+	# add the new node to the scene
+	current_scene.add_child(node)
+
+
+func load_node(node_scene_path):
+	var new_node_scene = load(node_scene_path)
+	var new_node = new_node_scene.instance()
+	return new_node
+
+
+func reparent_node_to(node: Node, new_parent: Node):
+	""" Reparent a node.
+	You can call this metod from a node to reparent it:
+		SceneManager.reparent_node_to(item, player)
+	"""
+	var old_parent = node.get_parent()
+	old_parent.remove_child(node)
+	# TODO: free memory?
+	new_parent.add_child(node)
+	
+
+##### SPLASHSCREEN SCRIPT #####
+
+extends Control
+
+onready var timer = $ColorRect2/Timer
+onready var anim_play1 = $ColorRect/AnimationPlayer
+onready var anim_play2 = $ColorRect2/AnimationPlayer2
+var check = 0
+
+
+func _ready():
+	get_node("/root/Audio/Effects").volume_db = log(0.3)*20
+	get_node("/root/Audio/Music").volume_db = log(0.5)*20
+	$GameLab.hide()
+	$BankItalia.hide()
+	$Sapienza.hide()
+	$ColorRect.color = Color(0,0,0,255)
+	timer.start(0.5)
+	
+func _process(delta):
+	if timer.time_left == 0:
+		if check == 0: anim_time(anim_play1,"Fade-Out(NB)",2.5,1)
+		elif check == 1: anim_time(anim_play2,"Fade-Out(AB)",1,2)
+		elif check == 2: anim_time(anim_play2,"Fade-In(BA)",2.5,3)
+		elif check == 3: anim_time(anim_play2,"Fade-In",1,4)
+		elif check == 4: SceneManager.goto_scene("res://Scenes/MainMenu/MainMenu.tscn")
+		
+func anim_time(anim_play,anim,sec,ctrl):
+	anim_play.play(anim)
+	timer.start(sec)
+	check = ctrl
+		
+func _on_AnimationPlayer_animation_finished(anim_name):
+	$ColorRect2.show()
+	$GameLab.show()
+	$BankItalia.show()
+	$Sapienza.show()
+	$ColorRect2.color = Color(255,255,255,255)
+	$ColorRect2/AnimationPlayer2.play("Fade-In(BA)")
+
+func _on_AnimationPlayer2_animation_finished(anim_name):
+	if check == 2:
+		$GameLab.hide()
+		$BankItalia.hide()
+		$Sapienza.hide()
+		$OrganizationXIII.show()
+		
+
+##### MAIN MENU SCRIPT #####
+
+extends Control
+
+export var rotation_speed = PI
+onready var sat = $Sat/Sat
+
+
+func _ready():
+	$Rect/ColorRect.color = Color(0,0,0,255)
+	$Rect/ColorRect.show()
+	$Rect/ColorRect/AnimationPlayer.play("Fade-Out")
+
+
+func _process(delta):
+	$Logo/Ufo.rotation += rotation_speed *0.2* delta
+	sat.set_offset(sat.get_offset() + 50 * -delta)
+	
+	
+##### ROCKET SCRIPT (Main Menù) #####
+
+extends KinematicBody2D
+
+var anim = 0
+var posy = 0
+var posx = 0
+var speed = Vector2()
+var dist = 1150
+var idclick = null
+var listposy = [1196, 1334, 1471, 1609, 1746]
+onready var rect = get_node("../Rect/ColorRect")
+onready var player = get_node("../Rect/ColorRect/AnimationPlayer")
+
+
+func _ready():
+	set_process(false)
+
+
+func _process(delta):
+	if self.position.x > dist:
+		speed = Vector2(-1,0)
+	else: 
+		speed = Vector2(0,0)
+		$Rocket.scale = Vector2(0.250,0.250)
+		$Rocket.play('Explosion')
+		
+# warning-ignore:return_value_discarded
+	move_and_collide(speed.normalized()*600*delta)
+	
+	if $Rocket.animation == "Explosion" and $Rocket.frame == 2: 
+		anim = 1
+		rect.show()
+		player.play("Fade-In")
+
+
+# warning-ignore:unused_argument
+func _on_AnimationPlayer_animation_finished(anim_name):
+	if anim == 1:
+		if idclick == 0: SceneManager.goto_scene("res://Scenes/SexChoise/SexChoise.tscn")
+		if idclick == 1: SceneManager.goto_scene("res://Scenes/Options/Options.tscn")
+		elif idclick == 2: SceneManager.goto_scene("res://Scenes/HighScore/HighScore.tscn")
+		elif idclick == 3: SceneManager.goto_scene("res://Scenes/Credits/Credits.tscn")
+		elif idclick == 4: get_tree().quit()
+	else:
+		rect.hide()
+
+
+# warning-ignore:return_value_discarded
+func click(event):
+	if event is InputEventScreenTouch:
+		if event.pressed and posy in listposy:
+			get_parent().set_mouse_filter(1)
+			self.position = Vector2(0,0)
+			$Rocket.scale = Vector2(1,1)
+			$Rocket.play('Launch')
+			show()
+			$Rocket.position = Vector2(1150,posy)
+			dist =  -1150 + posx
+			set_process(true)
+
+
+func _on_Gioca_input_event(_viewport, event, _shape_idx):
+	posy = 1196
+	posx = 500
+	idclick = 0
+	click(event)
+
+
+func _on_Opzioni_input_event(_viewport, event, _shape_idx):
+	posy = 1334
+	posx = 460
+	idclick = 1
+	click(event)
+
+
+func _on_Classifica_input_event(_viewport, event, _shape_idx):
+	posy = 1471
+	posx = 377
+	idclick = 2
+	click(event)
+
+
+func _on_Crediti_input_event(_viewport, event, _shape_idx):
+	posy = 1609
+	posx = 465
+	idclick = 3
+	click(event)
+
+
+func _on_Esci_input_event(_viewport, event, _shape_idx):
+	posy = 1746
+	posx = 533
+	idclick = 4
+	click(event)
+	
+	
+##### LIST OPTIONS SCRIPT (Main Menù) #####
+
+extends AnimatedSprite
+
+
+onready var audio = get_node("/root/Audio")
+
+
+func _ready():
+	pass
+
+
+func _on_Gioca_input_event(_viewport, event, _shape_idx):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			play('Gioca')
+			audio.play_effects("choice")
+
+
+func _on_Opzioni_input_event(_viewport, event, _shape_idx):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			play('Opzioni')
+			audio.play_effects("choice")
+
+
+func _on_Classifica_input_event(_viewport, event, _shape_idx):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			play('Classifica')
+			audio.play_effects("choice")
+
+
+func _on_Crediti_input_event(_viewport, event, _shape_idx):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			play('Crediti')
+			audio.play_effects("choice")
+
+
+func _on_Esci_input_event(_viewport, event, _shape_idx):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			play('Esci')
+			audio.play_effects("choice")
+	
+	
+##### OPTIONS SCRIPT #####
+
+extends Control
+
+
+var posmus = 0
+var poseff = 0
+onready var sat = $Sat/Sat
+onready var audio = get_node("/root/Audio")
+
+
+func _ready():
+	$ColorRect.show()
+	$ColorRect.color = Color(0,0,0,255)
+	$ColorRect/AnimationPlayer.play("Fade-Out")
+	$VolumeEff/VolumeEff.step = 0.0001
+	$VolumeMus/VolumeMus.step = 0.0001
+	if get_node("/root/Audio/Music").volume_db == log(0): $VolumeMus/VolumeMus.value = 0
+	else: $VolumeMus/VolumeMus.value = exp(get_node("/root/Audio/Music").volume_db/20)
+	if get_node("/root/Audio/Effects").volume_db == log(0): $VolumeEff/VolumeEff.value = 0
+	else: $VolumeEff/VolumeEff.value = exp(get_node("/root/Audio/Effects").volume_db/20)
+	$VolumeEff/VolumeEff.max_value = 1
+	$VolumeMus/VolumeMus.max_value = 1
+	$Lingua/Lingue.add_item("Italiano", 0)
+	$Lingua/Lingue.add_separator()
+	$Lingua/Lingue.add_item("Inglese", 1)
+	$Lingua/Lingue.add_item("Spagnolo", 2)
+	$Lingua/Lingue.add_item("Francese", 3)
+	$Lingua/Lingue.add_item("Tedesco", 4)
+	$Lingua/Lingue.add_item("Portoghese", 5)
+	$Lingua/Lingue.add_item("Cinese", 6)
+	$Lingua/Lingue.add_item("Giapponese", 7)
+	$Lingua/Lingue.add_item("Russo", 8)
+	$Lingua/Lingue.set_item_disabled(2, true)
+	$Lingua/Lingue.set_item_disabled(3, true)
+	$Lingua/Lingue.set_item_disabled(4, true)
+	$Lingua/Lingue.set_item_disabled(5, true)
+	$Lingua/Lingue.set_item_disabled(6, true)
+	$Lingua/Lingue.set_item_disabled(7, true)
+	$Lingua/Lingue.set_item_disabled(8, true)
+	$Lingua/Lingue.set_item_disabled(9, true)
+	
+	
+func _process(delta):
+	sat.set_offset(sat.get_offset() + 50 * -delta)
+	if $VolumeMus/VolumeMus.value > 0: $MusEff/Musica.pressed = true
+	else: 
+		$MusEff/Musica.pressed = false
+	if $VolumeEff/VolumeEff.value > 0: $MusEff/Effetti.pressed = true
+	else: $MusEff/Effetti.pressed = false
+	
+	
+func _on_AnimationPlayer_animation_finished(anim_name):
+	if $Indietro.click == 1: SceneManager.goto_scene("res://Scenes/MainMenu/MainMenu.tscn")
+	else: $ColorRect.hide()
+
+
+func _on_Musica_gui_input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			if $MusEff/Musica.pressed: 
+				posmus = $VolumeMus/VolumeMus.value
+				$VolumeMus/VolumeMus.value = 0
+			else:
+				$VolumeMus/VolumeMus.value = posmus
+
+
+func _on_Effetti_gui_input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			if $MusEff/Effetti.pressed: 
+				poseff = $VolumeEff/VolumeEff.value
+				$VolumeEff/VolumeEff.value = 0
+			else: 
+				$VolumeEff/VolumeEff.value = poseff
+
+
+func _on_VolumeEff_value_changed(value):
+	audio.get_node("Effects").volume_db = log($VolumeEff/VolumeEff.value) * 20
+
+
+func _on_VolumeMus_value_changed(value):
+	audio.get_node("Music").volume_db = log($VolumeMus/VolumeMus.value) * 20
+	
+	
+##### HIGHSCORES SCRIPT #####
+
+
+extends Control
+
+
+var data = []
+var index = -1
+var file = File.new()
+var path = ""
+var elem = 0
+var clas1 = 0
+var clas2 = 0
+var clas3 = 0
+
+
+func _ready():
+	set_process(false)
+	if OS.get_name() == "Windows": path = "res://Scenes/Game/HighScore.json"
+	elif OS.get_name() == "Android": path = "user://HighScore.json"
+	$Classifica.play()
+	$Roof.play()
+	$ColorRect.show()
+	$ColorRect.color = Color(0,0,0,255)
+	$ColorRect/AnimationPlayer.play("Fade-Out")
+	file.open(path, File.READ)
+	data = parse_json(file.get_as_text())
+	elem = data.size()
+	for i in $Griglia.get_children():
+		set_label(i.name)
+		index += 1
+	$Timer.start(0.01)
+	
+		
+func _process(delta):
+	for i in $Griglia.get_children():
+		if max(clas1,max(clas2,clas3)) < 250:
+			clas1 = write_text(i.name + "/Score")
+			clas1 = write_text(i.name + "/Age")
+			clas1 = write_text(i.name + "/Bias")
+	
+	
+func write_text(obj):
+	if "Etichette".is_subsequence_of(obj): return 0
+	obj = get_node("Griglia/" + obj)
+	obj.visible_characters += 1
+	$Timer.start(0.01)
+	if obj.visible_characters == obj.get_total_character_count()+1:
+		obj.visible_characters -= 1
+	return obj.visible_characters
+	
+	
+func set_label(vgrid):
+	if vgrid == "Etichette": return
+	if  index < elem: 
+		get_node("Griglia/" + vgrid + "/Score").text = data[index]["Punteggio"].insert(2, ".")
+		get_node("Griglia/" + vgrid + "/Age").text = data[index]["Anni"] + "." + data[index]["Mesi"]
+		get_node("Griglia/" + vgrid + "/Bias").text = data[index]["BIAS"]
+	else:
+		get_node("Griglia/" + vgrid + "/Score").text = "-"
+		get_node("Griglia/" + vgrid + "/Age").text = "-"
+		get_node("Griglia/" + vgrid + "/Bias").text = "-"
+	get_node("Griglia/" + vgrid + "/Score").visible_characters = 0
+	get_node("Griglia/" + vgrid + "/Age").visible_characters = 0
+	get_node("Griglia/" + vgrid + "/Bias").visible_characters = 0
+	return
+	
+	
+func _on_AnimationPlayer_animation_finished(anim_name):
+	set_process(true)
+	if $Indietro.click == 1: SceneManager.goto_scene("res://Scenes/MainMenu/MainMenu.tscn")
+	else: $ColorRect.hide()
+	
+
+##### CREDITS SCRIPT #####
+
+
+extends Control
+
+
+var cred1 = 0
+var cred2 = 0
+onready var ufo = $Ufo/Ufo
+
+func _ready():
+	set_process(false)
+	$ColorRect.show()
+	$ColorRect.color = Color(0,0,0,255)
+	$ColorRect/AnimationPlayer.play("Fade-Out")
+	$LogoTeam.play()
+	$LogoTeam.frames.remove_frame("Play", 0)
+	
+	
+func _process(delta):
+	ufo.set_offset(ufo.get_offset() + 50 * -delta)
+	if max(cred1, cred2) < max($Team.get_total_character_count(),$Thanks.get_total_character_count()):
+		cred1 = write_text(get_node("Team"))
+		cred2 = write_text(get_node("Thanks"))
+	
+	
+func _on_AnimationPlayer_animation_finished(anim_name):
+	set_process(true)
+	if $Indietro.click == 1: SceneManager.goto_scene("res://Scenes/MainMenu/MainMenu.tscn")
+	else: $ColorRect.hide()
+	
+func write_text(obj):
+	obj.visible_characters += 1
+	$Timer.start(0.01)
+	if obj.visible_characters == obj.get_total_character_count()+1:
+		obj.visible_characters -= 1
+	return obj.visible_characters
+
+
+##### SEXCHOICE SCRIPT #####
+
+
+extends Control
+
+var ids = ["Percorso", "Domande", "Risp1", "Risp2", "Ind", "Ind1", "Ind2", "Avatar", "BIAS", "BonMal1", "BonMal2", "Info", "Anni", "Mesi"]
+var data = {}
+var json = []
+var file = File.new()
+var path = "res://Scenes/Game/Domande.json"
+var par = {}
+
+
+func _ready():
+	$ColorRect.show()
+	$ColorRect.color = Color(0,0,0,255)
+	$ColorRect/AnimationPlayer.play("Fade-Out")
+	file.open(path, File.READ)
+	json = parse_json(file.get_as_text())
+	for i in ids:
+		if ids.find(i) == 0: continue
+		json[ids.find(i)-1].erase("Percorso")
+		data[i] = json[ids.find(i)-1]
+		
+	
+func _on_AnimationPlayer_animation_finished(anim_name):
+	if $Indietro.click == 1: SceneManager.goto_scene("res://Scenes/MainMenu/MainMenu.tscn")
+	elif $Avvia.click == 1: 
+		par = {0:1,1:data,2:"00",3:1}
+		SceneManager.goto_scene("res://Scenes/Game/One.tscn", par)
+	else: $ColorRect.hide()
+
+	
+##### TASTO AVVIA SCRIPT (Sex Choice) #####
+
+extends Button
+
+var click = 0
+onready var donna = get_node("../Donna")
+onready var indietro = get_node("../Indietro")
+onready var rect = get_node("../ColorRect")
+onready var player = get_node("../ColorRect/AnimationPlayer")
+onready var choice = get_node("../MissChoise")
+
+
+func _ready():
+	set_process(false)
+
+
+# warning-ignore:unused_argument
+func _process(delta):
+	if choice.get_node("Timer").time_left == 0:
+		choice.visible = not choice.visible
+		get_node("../MissChoise/Timer").start(0.3)
+
+
+func _on_Avvia_gui_input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			if donna.pressed:
+				click = 1
+				rect.show()
+				player.play("Fade-In")
+			else:
+				get_node("../MissChoise/Timer").start(0.01)
+				set_process(true)
+
+
+func _on_Donna_mouse_entered():
+	choice.hide()
+	set_process(false)
+	
+
+##### TASTO INDIETRO SCRIPT #####
+
+
+extends Button
+
+var click = 0
+onready var rect = get_node("../ColorRect")
+onready var player = get_node("../ColorRect/AnimationPlayer")
+
+func _ready():
+	click = 0
+
+
+func _on_Indietro_gui_input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			click = 1
+			rect.show()
+			player.play("Fade-In")
+			
+
+##### ONE SCRIPT #####
+
+extends Control
+
+var d = 0
+var r1 = 0
+var r2 = 0
+var ctrl = 0
+var data = {}
+var bonmalstart = 0
+var pathstr = ""
+var domande = null
+var risp1 = null
+var risp2 = null
+var ind = Vector3()
+var ind1 = null
+var ind2 = null
+var avatar = null
+var bias = null
+var bonmal1 = ""
+var bonmal2 = ""
+var info = null
+var anni = ""
+var mesi = ""
+var score = 0
+var heart = {0: 0, 1: -126, 2: -252, 3: -378, 4: -505}
+var brain = {0: 0, 1: -157, 2: -315, 3: -472, 4: -630}
+var money = {0: 0, 1: -162, 2: -325, 3: -487, 4: -650}
+var hstop = 0
+var bstop = 0
+var mstop = 0
+var maxd = 0
+var maxr1 = 0
+var maxr2 = 0
+var eff = ["bonus", "malus", "bias"]
+var checksc = 1
+var heartpos = null
+var brainpos = null
+var moneypos = null
+var params = null
+var debt = 0
+var study = 0
+var stopsfx = false
+var ending = {"L1": "112", "L2": "11111", "L3": "21", "L4": "1211", "L5": ["22111", "22112", "22121", "22122", "222111", "222211"], "W1": "11121", "W2": "1221", "W3": ["222121", "222221"]}
+onready var audio = get_node("/root/Audio")
+onready var prev_vol_eff = 0
+onready var prev_vol_mus = 0
+
+func init(params):
+	restart(params)
+	
+func _ready():
+	$Rect/ColorRect.show()
+	$Rect/ColorRect.color = Color(0,0,0,255)
+	$Rect/ColorRect/AnimationPlayer.play("Fade-Out")
+	if audio.get_node("Music").volume_db == log(0): 
+		$Music.set_pressed(true)
+		prev_vol_mus = -24
+	if audio.get_node("Effects").volume_db == log(0):
+		$Effects.set_pressed(true)
+		prev_vol_eff = log(0.5)*30
+	audio.play_music("game")
+	
+	
+# warning-ignore:unused_argument
+func _process(delta):
+	if heartpos.position.y > heart[int(ind[1])]:
+		heartpos.move_and_collide(Vector2(0,-1)*delta*100)
+		if hstop == 2: 
+			heartpos.position.y = heart[int(ind[1])]
+			hstop = 0
+		else: hstop = 1
+	elif heartpos.position.y < heart[int(ind[1])]:
+		heartpos.move_and_collide(Vector2(0,1)*delta*100)
+		if hstop == 1: 
+			heartpos.position.y = heart[int(ind[1])]
+			hstop = 0
+		else: hstop = 2
+	if brainpos.position.y > brain[int(ind[4])]:
+		brainpos.move_and_collide(Vector2(0,-1)*delta*100)
+		if bstop == 2: 
+			brainpos.position.y = brain[int(ind[4])]
+			bstop = 0
+		else: bstop = 1
+	elif brainpos.position.y < brain[int(ind[4])]:
+		brainpos.move_and_collide(Vector2(0,1)*delta*100)
+		if bstop == 1: 
+			brainpos.position.y = brain[int(ind[4])]
+			bstop = 0
+		else: bstop = 2
+	if moneypos.position.y > money[int(ind[7])]:
+		moneypos.move_and_collide(Vector2(0,-1)*delta*100)
+		if mstop == 2: 
+			moneypos.position.y = money[int(ind[7])]
+			mstop = 0
+		else: mstop = 1
+	elif moneypos.position.y < money[int(ind[7])]:
+		moneypos.move_and_collide(Vector2(0,1)*delta*100)
+		if mstop == 1: 
+			moneypos.position.y = money[int(ind[7])]
+			mstop = 0
+		else: mstop = 2
+	if $TimerText.time_left == 0 and d < maxd:
+		d = write_text($Domanda)
+	if d == maxd:
+		if checksc == 1:
+			r1 = write_text($Risposta/Risposta)
+			if r1 == maxr1:
+				$Rect/ColorRect.hide()
+				set_process(false)
+		else:
+			r1 = write_text($Risposta1/Risposta1)
+			r2 = write_text($Risposta2/Risposta2)
+			if max(r1, r2) == max(maxr1, maxr2):
+				$Rect/ColorRect.hide()
+				set_process(false)
+				
+func restart(params):
+	stopsfx = false
+	$Rect/ColorRect.show()
+	$TimerText.start(0.01)
+	heartpos = $BoxIndicatori/HeartEmpty/KBH
+	brainpos = $BoxIndicatori/BrainEmpty/KBB
+	moneypos = $BoxIndicatori/MoneyEmpty/KBM
+	ctrl = params[0]
+	data = params[1]
+	pathstr = params[2]
+	checksc = params[3]
+	domande = data["Domande"][pathstr]
+	risp1 = data["Risp1"][pathstr]
+	risp2 = data["Risp2"][pathstr]
+	ind = data["Ind"][pathstr]
+	ind1 = data["Ind1"][pathstr]
+	ind2 = data["Ind2"][pathstr]
+	avatar = data["Avatar"][pathstr]
+	info = data["Info"][pathstr]
+	if not ending.has(pathstr):
+		bonmal1 = data["BonMal1"][pathstr]
+		bonmal2 = data["BonMal2"][pathstr]
+		anni = str(data["Anni"][pathstr])
+		mesi = str(data["Mesi"][pathstr])
+		bias = data["BIAS"][pathstr]
+	$BoxAvatar.set_texture(load("res://Scenes/Game/Avatar/" + avatar))
+	d = 0
+	$Domanda.visible_characters = 0
+	$Domanda.text = domande
+	maxd = $Domanda.get_total_character_count()
+	if checksc == 1:
+		if pathstr != "00": $Risposta.step = 0
+		r1 = 0
+		$Risposta/Risposta.visible_characters = 0
+		$Risposta/Risposta.text = risp1
+		maxr1 = $Risposta/Risposta.get_total_character_count()
+	else:
+		if pathstr != "00": $Risposta1.step = 0
+		if pathstr != "00": $Risposta2.step = 0
+		r1 = 0
+		r2 = 0
+		$Risposta1/Risposta1.visible_characters = 0
+		$Risposta2/Risposta2.visible_characters = 0
+		$Risposta1/Risposta1.text = risp1
+		$Risposta2/Risposta2.text = risp2
+		maxr1 = $Risposta1/Risposta1.get_total_character_count()
+		maxr2 = $Risposta2/Risposta2.get_total_character_count()
+	if bonmal1 == "Debito" or bonmal2 == "Debito": 
+		debt += 1
+		$BoxIndicatori/MoneyEmpty/MMalus.show()
+		if "malus" in eff:
+			audio.play_effects("malus")
+			eff.erase("malus")
+	else: $BoxIndicatori/MoneyEmpty/MMalus.hide()
+	if bonmal1 == "Studio" or bonmal2 == "Studio":
+		study += 1
+		if "bonus" in eff:
+			audio.play_effects("bonus")
+			eff.erase("bonus")
+	if bonmal1 != "":
+		$BoxBonus/Active1.set_texture(load("res://Scenes/Game/BonusMalus/" + bonmal1 + ".png"))
+		$BoxBonus/Active1.show()
+	else: 
+		$BoxBonus/Active1.hide()
+	if bonmal2 != "":
+		$BoxBonus/Active2.set_texture(load("res://Scenes/Game/BonusMalus/" + bonmal2 + ".png"))
+		$BoxBonus/Active2.show()
+	else:
+		$BoxBonus/Active2.hide()
+	if bias == "Gregge":
+		if "bias" in eff:
+			audio.play_effects("bias")
+			eff.erase("bias")
+	if anni != "": $BoxBonus/Anni.text = anni + " Anni"
+	if mesi != "": $BoxBonus/Mesi.text = mesi + " Mesi"
+	if info != "": $Domanda/Info.show()
+	else: $Domanda/Info.hide()
+	if ending.has(pathstr):
+		if bonmal1 == "Debito" or bonmal2 == "Debito": score += -500
+		elif bonmal1 == "Studio" or bonmal2 == "Studio": score += 500
+		if bias == "Gregge": score -= 2000
+		score += (int(ind[1]) + int(ind[4]) + int(ind[7]))/3 * 100 + int(anni) * 1000 + int(mesi) * 250
+	set_process(true)
+
+
+func write_text(obj):
+	obj.visible_characters += 1
+	$TimerText.start(0.01)
+	if obj.visible_characters == obj.get_total_character_count()+1:
+		obj.visible_characters -= 1
+	return obj.visible_characters
+	
+
+
+func _on_NewGame_gui_input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			ctrl = 2
+			$Rect/ColorRect.show()
+			$Rect/ColorRect/AnimationPlayer.play("Fade-In")
+			
+			
+func _on_Menu_gui_input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			ctrl = 3
+			$Rect/ColorRect.show()
+			$Rect/ColorRect/AnimationPlayer.play("Fade-In")
+
+
+func _on_AnimationPlayer_animation_finished(anim_name):
+	if ctrl == 2:
+		SceneManager.goto_scene("res://Scenes/SexChoise/SexChoise.tscn")
+		audio.play_music("ost")
+		audio.stop_sfx()
+	if ctrl == 3:
+		SceneManager.goto_scene("res://Scenes/MainMenu/MainMenu.tscn")
+		audio.play_music("ost")
+		audio.stop_sfx()
+
+
+func _on_Bonus1_gui_input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			bonmalstart = 1
+
+
+func _on_Bonus2_gui_input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			bonmalstart = 1
+
+
+func _on_Bonus3_gui_input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			bonmalstart = 1
+
+
+func _on_Bonus4_gui_input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			bonmalstart = 1
+
+
+func _on_Indietro2_gui_input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			bonmalstart = 2
+
+
+func _on_Effects_toggled(button_pressed):
+	if button_pressed:
+		prev_vol_eff = get_node("/root/Audio/Effects").volume_db
+		get_node("/root/Audio/Effects").volume_db = log(0)
+	else: get_node("/root/Audio/Effects").volume_db = prev_vol_eff
+
+
+func _on_Music_toggled(button_pressed):
+	if button_pressed: 
+		prev_vol_mus = get_node("/root/Audio/Music").volume_db
+		get_node("/root/Audio/Music").volume_db = log(0)
+	else: get_node("/root/Audio/Music").volume_db = prev_vol_mus
+	
+	
+##### SLIDE RISP (One) SCRIPT #####
+
+extends KinematicBody2D
+
+var save = []
+var stopdrag
+var params = {}
+var speed = Vector2()
+var check = false
+var click = 0
+var ctrllev = 0
+var go = false
+var delt = 0
+var step = 0
+var key = 0
+var ctrl = false
+var r = 0
+var s = 0
+var a = 0
+var b = 0
+var all = []
+var maxall = []
+var maxres = 0
+var bon1 = 0
+var dbon1 = 0
+var bon2 = 0
+var dbon2 = 0
+var back2 = 0
+var bonmal = 0
+var highscpath = ""
+#var stopsfx = false
+onready var bonmalref = get_node("../Feedback/Feedback/BonMal")
+onready var back2ref = get_node("../Feedback/Feedback/Back2/Indietro2")
+onready var dbon2ref = get_node("../Feedback/Feedback/Bon2/Descr2")
+onready var bon2ref = get_node("../Feedback/Feedback/Bon2")
+onready var dbon1ref = get_node("../Feedback/Feedback/Bon1/Descr1")
+onready var bon1ref = get_node("../Feedback/Feedback/Bon1")
+onready var resref = get_node("../Feedback/Feedback/Result")
+onready var scoreref = get_node("../Feedback/Feedback/Score")
+onready var ageref = get_node("../Feedback/Feedback/Age")
+onready var biasref = get_node("../Feedback/Feedback/Bias")
+onready var feedback = get_node("../Feedback/Feedback")
+onready var ending = get_parent().ending
+onready var levsx = get_node("../Container/LeverSx")
+onready var levdx = get_node("../Container/LeverDx")
+
+func _ready():
+	$SideStand.paused = true
+	$SideStand.start()
+	$CenterStand.start(3)
+	if OS.get_name() == "Windows": highscpath = "res://Scenes/Game/HighScore.json"
+	elif OS.get_name() == "Android": highscpath = "user://HighScore.json"
+
+
+func _process(delta):
+	if get_parent().checksc == 1:
+		if step == 0:
+			if position.y > 1332:
+				move_and_collide(Vector2(0,-15)*delta*100)
+				return
+			else:
+				move_and_collide(Vector2(0,0)*delta*100)
+				position.y = 1332
+				step = 1
+		speed = Vector2()
+		delt = delta
+		if get_parent().bonmalstart == 1:
+			get_tree().call_group("Int", "hide")
+			get_tree().call_group("BonusMalus", "show")
+			get_node("../Rect/ColorRect").show()
+			if get_node("../Feedback").position.x < 0:
+				get_node("../Feedback").move_and_collide(Vector2(15, 0)*200*delt)
+			else:
+				setbonmal(get_node("../BoxBonus/Active1"), "res://Scenes/Game/BonusMalus/Debito.png", get_node("../Feedback/Feedback/Bon1/Active1"), get_node("../Feedback/Feedback/Bon1/TitleBon1"), get_node("../Feedback/Feedback/Bon1/Descr1"), "DEBITO", "Sei indebitata fino al collo! Devi ripagare i debiti: -5% Denaro Max ogni turno. Turni restanti: " + str(5 - get_parent().debt) + ".")
+				setbonmal(get_node("../BoxBonus/Active1"), "res://Scenes/Game/BonusMalus/Studio.png", get_node("../Feedback/Feedback/Bon1/Active1"), get_node("../Feedback/Feedback/Bon1/TitleBon1"), get_node("../Feedback/Feedback/Bon1/Descr1"), "STUDIO", "Le domande a tema 'Università' potenziano gli effetti positivi del 5%. Turni restanti: " + str(3 - get_parent().study) + ".")
+				setbonmal(get_node("../BoxBonus/Active2"), "res://Scenes/Game/BonusMalus/Studio.png", get_node("../Feedback/Feedback/Bon2/Active2"), get_node("../Feedback/Feedback/Bon2/TitleBon2"), get_node("../Feedback/Feedback/Bon2/Descr2"), "STUDIO", "Le domande a tema 'Università' potenziano gli effetti positivi del 5%. Turni restanti: " + str(3 - get_parent().study) + ".")
+				get_node("../Feedback").position.x = 0
+				var maxbonmal = get_node("../Feedback/Feedback/BonMal").get_total_character_count()
+				var maxbon1 = get_node("../Feedback/Feedback/Bon1/TitleBon1").get_total_character_count()
+				var maxdbon1 = get_node("../Feedback/Feedback/Bon1/Descr1").get_total_character_count()
+				var maxbon2 = get_node("../Feedback/Feedback/Bon2/TitleBon2").get_total_character_count()
+				var maxdbon2 = get_node("../Feedback/Feedback/Bon2/Descr2").get_total_character_count()
+				var maxback2 = get_node("../Feedback/Feedback/Back2/Indietro2").get_total_character_count()
+				var maxall = [maxbon1, maxdbon1, maxback2, maxbonmal]
+				maxall.sort()
+				var all = [bon1, dbon1, back2, bonmal]
+				all.sort()
+				if get_node("../BoxBonus/Active1").texture == null:
+					if bonmal < maxbonmal:
+						back2 = get_parent().write_text(back2ref)
+						bonmal = get_parent().write_text(bonmalref)
+					else: get_node("../Rect/ColorRect").hide()
+				elif bonmal > 0:
+					if max(bon1, dbon1) < max(maxbon1, maxdbon1):
+						back2 = get_parent().write_text(back2ref)
+						bonmal = get_parent().write_text(bonmalref)
+						bon1 = get_parent().write_text(bon1ref)
+						dbon1 = get_parent().write_text(dbon1ref)
+					elif max(bon2, dbon2) < max(maxbon2, maxdbon2):
+						bon2 = get_parent().write_text(dbon2ref)
+						dbon2 = get_parent().write_text(dbon2ref)
+					else: get_node("../Rect/ColorRect").hide()
+				elif bonmal == 0:
+					if all[3] < maxall[3]:
+						back2 = get_parent().write_text(back2ref)
+						bonmal = get_parent().write_text(bonmalref)
+						bon1 = get_parent().write_text(bon1ref)
+						dbon1 = get_parent().write_text(dbon1ref)
+				else: get_node("../Rect/ColorRect").hide()
+		elif get_parent().bonmalstart == 2:
+			get_node("../Rect/ColorRect").show()
+			if get_node("../Feedback").position.x > -1040:
+				get_node("../Feedback").move_and_collide(Vector2(-15, 0)*200*delt)
+			else:
+				get_node("../Feedback").position.x = -1040
+				get_node("../Rect/ColorRect").hide()
+				get_tree().call_group("BonusMalus", "hide")
+				get_parent().bonmalstart = 0
+
+		if position.x >= 440:
+			if ctrllev == 1:
+				hideind()
+				levsx.playing = false
+				levsx.frame = 0
+			levmaj(levsx, 15)
+		if position.x <= 640:
+			if ctrllev == 2:
+				hideind()
+				levdx.playing = false
+				levdx.frame = 0
+			levmin(levdx, 15)
+		if get_parent().ctrl == 1:
+			tutorial(delta)
+		if $RayCast2D.is_colliding():
+			var collider = $RayCast2D.get_collider()
+			if collider: 
+				if "Dx" in collider.name:
+					ctrllev = 2
+					indicators(get_parent().ind2)
+					levdx.playing = true
+					levmaj(levdx, 105)
+				elif "Sx" in collider.name:
+					ctrllev = 1
+					indicators(get_parent().ind1)
+					levsx.playing = true
+					levmin(levsx, -75)
+		if click == 0 and get_parent().ctrl == 0:
+			if position.x < 530:
+				speed = Vector2(5,0)
+			elif position.x > 550:
+				speed = Vector2(-5,0)
+		if position.x <= 300:
+			speed = Vector2(-20,0)
+		if position.x >= 780:
+			speed = Vector2(20,0)
+		
+		move_and_collide(speed*delta*100)
+	
+		if position.x <= -356 or position.x >= 1436:
+			if get_parent().stopsfx == false:
+				get_node("../").audio.play_effects("slide")
+				get_parent().stopsfx = true
+			levsx.playing = false
+			levsx.frame = 0
+			levdx.playing = false
+			levdx.frame = 0
+			if get_parent().pathstr == "00":
+				reload(0, get_parent().data, "0", 2)
+			else:
+				if ending.has(get_parent().pathstr):
+					if ctrl == false:
+						get_tree().call_group("Final", "show")
+						get_tree().call_group("Int", "hide")
+						get_node("../Rect/ColorRect").show()
+						if  get_node("../Feedback").position.x < 0:
+							get_node("../Feedback").move_and_collide(Vector2(15,0)*200*delta)
+							return
+						else:
+							get_node("../Feedback").position.x = 0
+						if get_parent().pathstr in ["L2", "L3", "L5"]:
+							indfeedback("Ind1", Vector2(540, 380), "res://Scenes/Game/Indicatori/MoneyEmpty.png", "res://Scenes/Game/Indicatori/MoneyFail.png")
+						if get_parent().pathstr == "L1":
+							indfeedback("Ind1", Vector2(540, 380), "res://Scenes/Game/Indicatori/HeartEmpty.png", "res://Scenes/Game/Indicatori/HeartFail.png")
+						if get_parent().pathstr == "L4":
+							indfeedback("Ind1", Vector2(360, 380), "res://Scenes/Game/Indicatori/HeartEmpty.png", "res://Scenes/Game/Indicatori/HeartFail.png")
+							indfeedback("Ind2", Vector2(720, 380), "res://Scenes/Game/Indicatori/BrainEmpty.png", "res://Scenes/Game/Indicatori/BrainFail.png")
+						if get_parent().pathstr in ["W1", "W2", "W3"]:
+							feedback.get_node("Result").text = "HAI VINTO!"
+							get_node("../BoxIndicatori/HeartEmpty").position = Vector2(230, 380)
+							get_node("../BoxIndicatori/HeartEmpty").z_index = 1
+							get_node("../BoxIndicatori/BrainEmpty").position = Vector2(540, 380)
+							get_node("../BoxIndicatori/BrainEmpty").z_index = 1
+							get_node("../BoxIndicatori/MoneyEmpty").position = Vector2(850, 380)
+							get_node("../BoxIndicatori/MoneyEmpty").z_index = 1
+						ctrl = true
+						if feedback.get_node("Result").text == "HAI VINTO!": get_node("../").audio.play_effects("win")
+						else: get_node("../").audio.play_effects("lose")
+						feedback.get_node("Score").text = "PUNTEGGIO: " + str(get_parent().score)
+						feedback.get_node("Age").text = "ETÀ RAGGIUNTA:\n" + get_parent().anni + " Anni e " + get_parent().mesi + " Mesi"
+						if get_parent().bias == "Gregge": 
+							feedback.get_node("Bias").rect_size.y = 660
+							feedback.get_node("Bias").rect_pivot_offset.y = 330
+							feedback.get_node("Bias").get("custom_fonts/font").set_size(52)
+							feedback.get_node("Bias").text = "BIAS: EFFETTO GREGGE\nÈ la tendenza che molti hanno\na seguire il comportamento\ndella maggioranza quando si tratta\ndi prendere decisioni: spesso le decisioni prese così portano ad insoddisfazione rispetto all’aver preso isolatamente le decisioni."
+						else:
+							feedback.get_node("Bias").get("custom_fonts/font").set_size(65)
+							feedback.get_node("Bias").rect_size.y = 140
+							feedback.get_node("Bias").rect_pivot_offset.y = 70
+							feedback.get_node("Bias").text = "NESSUN BIAS INCONTRATO"
+							get_parent().bias = "-"
+						maxres = feedback.get_node("Result").get_total_character_count()
+						var maxscore = feedback.get_node("Score").get_total_character_count()
+						var maxage = feedback.get_node("Age").get_total_character_count()
+						var maxbias = feedback.get_node("Bias").get_total_character_count()
+						maxall = [maxres, maxscore, maxage, maxbias]
+						maxall.sort()
+					all = [r, s, a, b]
+					all.sort()
+					if all[3] < maxall[3]:
+						if r == maxres:
+							feedback.get_node("Ind1").show()
+							feedback.get_node("Ind2").show()
+							feedback.get_node("Ind1").play()
+							feedback.get_node("Ind2").play()
+						r = get_parent().write_text(resref)
+						s = get_parent().write_text(scoreref)
+						a = get_parent().write_text(ageref)
+						b = get_parent().write_text(biasref)
+					else: 
+						var file = File.new()
+						file.open(highscpath,File.READ)
+						if file.file_exists(highscpath):
+							save = parse_json(file.get_as_text())
+						var update = {"Punteggio": str(get_parent().score), "Anni": get_parent().anni, "Mesi": get_parent().mesi, "BIAS": get_parent().bias}
+						var insert = true
+						for i in save:
+							i = i.values()
+							var upd = update.values()
+							i.sort()
+							upd.sort()
+							if i == upd:
+								insert = false
+						if insert == true:
+							save.append(update)
+						else:
+							file.close()
+							set_process(false)
+						file.close()
+						file = File.new()
+						save.sort_custom(self,"customsort")
+						file.open(highscpath,File.WRITE)
+						file.store_line(to_json(save))
+						file.close()
+						
+						get_node("../Rect/ColorRect").hide()
+						set_process(false)
+					return
+				for i in ending.keys(): 
+					if ending[i] is String:
+						if get_parent().pathstr + "1" == ending[i]:
+							reload(0, get_parent().data, i, 1)
+							break
+					elif ending[i] is Array:
+						for j in ending[i]:
+							if get_parent().pathstr + "1" == j:
+								reload(0, get_parent().data, i, 1)
+								break
+				
+func reload(zero, one, two, three):
+	
+	stopdrag = InputEventMouseButton.new()
+	stopdrag.set_button_index(1)
+	stopdrag.set_pressed(false)
+	Input.parse_input_event(stopdrag)
+	
+	params[0] = zero
+	params[1] = one
+	params[2] = two
+	params[3] = three
+	if three == 2:
+		get_node("../Risposta1").position = Vector2(340,1800)
+		get_node("../Risposta2").position = Vector2(740, 1800)
+		get_node("../BetweenRisp").position = Vector2(540, 1800)
+		position = Vector2(540, 2500)
+	else:
+		position = Vector2(540, 1800)
+	hideind()
+	get_parent().restart(params)
+
+func indfeedback(ind, pos, frame1, frame2):
+	feedback.get_node("Result").text = "HAI PERSO!"
+	feedback.get_node(ind).global_position = pos
+	feedback.get_node(ind).frames.add_frame("Fail", load(frame1), 0)
+	feedback.get_node(ind).frames.add_frame("Fail", load(frame2), 1)
+
+func tutorial(delta):
+	if $CenterStand.time_left == 0:
+		go = true
+	if go == true:
+		$Risposta/Slide.show()
+		if position.x > 456 and check == false:
+			$Risposta/Slide.set_texture(load("res://Utility/SlideSx.png"))
+			speed = Vector2(-1,0)
+		elif position.x < 624 and check == true:
+			$Risposta/Slide.set_texture(load("res://Utility/SlideDx.png"))
+			speed = Vector2(1,0)
+		else:
+			speed = Vector2(0,0)
+			if $SideStand.time_left == 1:
+				$SideStand.paused = false
+			elif $SideStand.time_left == 0:
+				check = not check
+				position.x = 540
+				$Risposta/Slide.hide()
+				$SideStand.paused = true
+				$SideStand.start()
+				go = false
+				$CenterStand.start(1)
+	else: 
+		speed = Vector2(0,0)
+	move_and_collide(speed*100*delta)
+
+
+func _on_Risposta_gui_input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			$Risposta/Slide.hide()
+			get_parent().ctrl = 0
+			click = 1
+		if event.pressed == false:
+			click = 0
+	if event is InputEventScreenDrag:
+		if event.speed.x > 0: $RayCast2D.cast_to.x = 350
+		else: $RayCast2D.cast_to.x = -350
+		var speed = Vector2(event.speed.x,0)
+		move_and_collide(speed*2*delt)
+		
+func indicators(index):
+	if index[1] == "1": 
+		get_node("../BoxIndicatori/HeartEmpty/HPoint").scale = Vector2(1.5, 1.5)
+		get_node("../BoxIndicatori/HeartEmpty/HPoint").show()
+	elif index[1] == "2":
+		get_node("../BoxIndicatori/HeartEmpty/HPoint").scale = Vector2(2.5, 2.5)
+		get_node("../BoxIndicatori/HeartEmpty/HPoint").show()
+	if index[4] == "1": 
+		get_node("../BoxIndicatori/BrainEmpty/BPoint").scale = Vector2(1.5, 1.5)
+		get_node("../BoxIndicatori/BrainEmpty/BPoint").show()
+	elif index[4] == "2":
+		get_node("../BoxIndicatori/BrainEmpty/BPoint").scale = Vector2(2.5, 2.5)
+		get_node("../BoxIndicatori/BrainEmpty/BPoint").show()
+	if index[7] == "1": 
+		get_node("../BoxIndicatori/MoneyEmpty/MPoint").scale = Vector2(1.5, 1.5)
+		get_node("../BoxIndicatori/MoneyEmpty/MPoint").show()
+	elif index[7] == "2":
+		get_node("../BoxIndicatori/MoneyEmpty/MPoint").scale = Vector2(2.5, 2.5)
+		get_node("../BoxIndicatori/MoneyEmpty/MPoint").show()
+
+
+func setbonmal(ifpath1, ifpath2, dpath1, dpath2, dpath3, text1, text2):
+	if ifpath1.texture != null:
+		if ifpath1.texture.resource_path == ifpath2:
+			dpath1.set_texture(load(ifpath2))
+			dpath2.text = text1
+			dpath3.text = text2
+	else:
+		dpath1.set_texture(null)
+		dpath2.text = ""
+		dpath3.text = ""
+	
+func hideind():
+	get_node("../BoxIndicatori/HeartEmpty/HPoint").hide()
+	get_node("../BoxIndicatori/BrainEmpty/BPoint").hide()
+	get_node("../BoxIndicatori/MoneyEmpty/MPoint").hide()
+
+
+func levmaj(lev, cap):
+	lev.rotation_degrees += 5
+	if lev.rotation_degrees >= cap: 
+		lev.rotation_degrees = cap
+		
+func levmin(lev, cap):
+	lev.rotation_degrees -= 5
+	if lev.rotation_degrees <= cap: 
+		lev.rotation_degrees = cap
+
+func customsort(a,b):
+	if a["Punteggio"] > b["Punteggio"]:
+		return true
+	elif a["Punteggio"] == b["Punteggio"] and a["Anni"] > b["Anni"]:
+		return true
+	elif a["Punteggio"] == b["Punteggio"] and a["Anni"] == b["Anni"] and a["Mesi"] > b["Mesi"]:
+		return true
+	elif a["Punteggio"] == b["Punteggio"] and a["Anni"] == b["Anni"] and a["Mesi"] == b["Mesi"] and a["BIAS"] == "-":
+		return true
+	else:
+		return false
+		
+		
+##### SLIDE RISP2 SCRIPT #####
+
+extends KinematicBody2D
+
+var stopdrag = null
+var params = {}
+var choice = 0
+var speed = Vector2()
+var check = 0
+var delt = 0
+var step = 0
+var end = false
+var infostart = 0
+var ints = 0
+var intd1 = 0
+var intc = 0
+var intd2 = 0
+var back = 0
+var bon1 = 0
+var dbon1 = 0
+var bon2 = 0
+var dbon2 = 0
+var back2 = 0
+var bonmal = 0
+onready var bonmalref = get_node("../Feedback/Feedback/BonMal")
+onready var back2ref = get_node("../Feedback/Feedback/Back2/Indietro2")
+onready var dbon2ref = get_node("../Feedback/Feedback/Bon2/Descr2")
+onready var bon2ref = get_node("../Feedback/Feedback/Bon2")
+onready var dbon1ref = get_node("../Feedback/Feedback/Bon1/Descr1")
+onready var bon1ref = get_node("../Feedback/Feedback/Bon1")
+onready var backref = get_node("../Feedback/Feedback/Back/Indietro")
+onready var intsref = get_node("../Feedback/Feedback/IntSem")
+onready var intd1ref = get_node("../Feedback/Feedback/IntSem/Descr1")
+onready var intcref = get_node("../Feedback/Feedback/IntCom")
+onready var intd2ref = get_node("../Feedback/Feedback/IntCom/Descr2")
+onready var ending = get_parent().ending
+onready var levsx = get_node("../Container/LeverSx")
+onready var levdx = get_node("../Container/LeverDx")
+onready var labsx = get_node("../Risposta1")
+onready var labdx = get_node("../Risposta2")
+
+func _ready():
+	pass
+	
+func _process(delta):
+	if get_parent().checksc == 2:
+		if step == 0:
+			if position.y > 1332:
+				labsx.move_and_collide(Vector2(0,-10)*delta*100)
+				labdx.move_and_collide(Vector2(0,-10)*delta*100)
+				get_node("../BetweenRisp").position.y = 1332
+				return
+			else:
+				get_node("../BetweenRisp").position.y = 1332
+				labsx.move_and_collide(Vector2(0,0)*delta*100)
+				labdx.move_and_collide(Vector2(0,0)*delta*100)
+				labsx.position.y = 1332
+				labdx.position.y = 1332
+				step = 1
+		speed = Vector2()
+		delt = delta
+		if get_parent().bonmalstart == 1:
+			get_tree().call_group("Int", "hide")
+			get_tree().call_group("BonusMalus", "show")
+			get_node("../Rect/ColorRect").show()
+			if get_node("../Feedback").position.x < 0:
+				get_node("../Feedback").move_and_collide(Vector2(15, 0)*200*delt)
+			else:
+				setbonmal(get_node("../BoxBonus/Active1"), "res://Scenes/Game/BonusMalus/Debito.png", get_node("../Feedback/Feedback/Bon1/Active1"), get_node("../Feedback/Feedback/Bon1/TitleBon1"), get_node("../Feedback/Feedback/Bon1/Descr1"), "DEBITO", "Sei indebitata fino al collo! Devi ripagare i debiti: -5% Denaro Max ogni turno. Turni restanti: " + str(5 - get_parent().debt) + ".")
+				setbonmal(get_node("../BoxBonus/Active1"), "res://Scenes/Game/BonusMalus/Studio.png", get_node("../Feedback/Feedback/Bon1/Active1"), get_node("../Feedback/Feedback/Bon1/TitleBon1"), get_node("../Feedback/Feedback/Bon1/Descr1"), "STUDIO", "Le domande a tema 'Università' potenziano gli effetti positivi del 5%. Turni restanti: " + str(3 - get_parent().study) + ".")
+				setbonmal(get_node("../BoxBonus/Active2"), "res://Scenes/Game/BonusMalus/Studio.png", get_node("../Feedback/Feedback/Bon2/Active2"), get_node("../Feedback/Feedback/Bon2/TitleBon2"), get_node("../Feedback/Feedback/Bon2/Descr2"), "STUDIO", "Le domande a tema 'Università' potenziano gli effetti positivi del 5%. Turni restanti: " + str(3 - get_parent().study) + ".")
+				get_node("../Feedback").position.x = 0
+				var maxbonmal = get_node("../Feedback/Feedback/BonMal").get_total_character_count()
+				var maxbon1 = get_node("../Feedback/Feedback/Bon1/TitleBon1").get_total_character_count()
+				var maxdbon1 = get_node("../Feedback/Feedback/Bon1/Descr1").get_total_character_count()
+				var maxbon2 = get_node("../Feedback/Feedback/Bon2/TitleBon2").get_total_character_count()
+				var maxdbon2 = get_node("../Feedback/Feedback/Bon2/Descr2").get_total_character_count()
+				var maxback2 = get_node("../Feedback/Feedback/Back2/Indietro2").get_total_character_count()
+				var maxall = [maxbon1, maxdbon1, maxback2, maxbonmal]
+				maxall.sort()
+				var all = [bon1, dbon1, back2, bonmal]
+				all.sort()
+				if get_node("../BoxBonus/Active1").texture == null:
+					if bonmal < maxbonmal:
+						back2 = get_parent().write_text(back2ref)
+						bonmal = get_parent().write_text(bonmalref)
+					else: get_node("../Rect/ColorRect").hide()
+				elif bonmal > 0:
+					if max(bon1, dbon1) < max(maxbon1, maxdbon1):
+						back2 = get_parent().write_text(back2ref)
+						bonmal = get_parent().write_text(bonmalref)
+						bon1 = get_parent().write_text(bon1ref)
+						dbon1 = get_parent().write_text(dbon1ref)
+					elif max(bon2, dbon2) < max(maxbon2, maxdbon2):
+						bon2 = get_parent().write_text(dbon2ref)
+						dbon2 = get_parent().write_text(dbon2ref)
+					else: get_node("../Rect/ColorRect").hide()
+				elif bonmal == 0:
+					if all[3] < maxall[3]:
+						back2 = get_parent().write_text(back2ref)
+						bonmal = get_parent().write_text(bonmalref)
+						bon1 = get_parent().write_text(bon1ref)
+						dbon1 = get_parent().write_text(dbon1ref)
+				else: get_node("../Rect/ColorRect").hide()
+		elif get_parent().bonmalstart == 2:
+			get_node("../Rect/ColorRect").show()
+			if get_node("../Feedback").position.x > -1040:
+				get_node("../Feedback").move_and_collide(Vector2(-15, 0)*200*delt)
+			else:
+				get_node("../Feedback").position.x = -1040
+				get_node("../Rect/ColorRect").hide()
+				get_tree().call_group("BonusMalus", "hide")
+				get_parent().bonmalstart = 0
+				
+		if infostart == 1:
+			get_tree().call_group("BonusMalus", "hide")
+			get_tree().call_group("Int", "show")
+			get_node("../Rect/ColorRect").show()
+			if get_node("../Feedback").position.x < 0:
+				get_node("../Feedback").move_and_collide(Vector2(15, 0)*200*delt)
+			else:
+				get_node("../Feedback").position.x = 0
+				var maxsemp = get_node("../Feedback/Feedback/IntSem").get_total_character_count()
+				var maxdescr1 = get_node("../Feedback/Feedback/IntSem/Descr1").get_total_character_count()
+				var maxcomp = get_node("../Feedback/Feedback/IntCom").get_total_character_count()
+				var maxdescr2 = get_node("../Feedback/Feedback/IntCom/Descr2").get_total_character_count()
+				var maxback = get_node("../Feedback/Feedback/Back/Indietro").get_total_character_count()
+				var maxall2 = [maxsemp, maxdescr1, maxcomp, maxdescr2, maxback]
+				maxall2.sort()
+				var all2 = [ints, intd1, intc, intd2, back]
+				all2.sort()
+				if all2[4] < maxall2[4]:
+					ints = get_parent().write_text(intsref)
+					intd1 = get_parent().write_text(intd1ref)
+					intc = get_parent().write_text(intcref)
+					intd2 = get_parent().write_text(intd2ref)
+					back = get_parent().write_text(backref)
+				else: get_node("../Rect/ColorRect").hide()
+		elif infostart == 2:
+			get_node("../Rect/ColorRect").show()
+			if get_node("../Feedback").position.x > -1040:
+				get_node("../Feedback").move_and_collide(Vector2(-15, 0)*200*delt)
+			else:
+				get_node("../Feedback").position.x = -1040
+				get_node("../Rect/ColorRect").hide()
+				get_tree().call_group("Int", "hide")
+				infostart = 0
+		if labsx.position.x >= 260:
+			levsx.playing = false
+			levsx.frame = 0
+			levmaj(levsx, 15)
+		if labdx.position.x <= 820:
+			levdx.playing = false
+			levdx.frame = 0
+			levmin(levdx, 15)
+		if labsx.position.x >= 260 and labdx.position.x <= 820: hideind()
+		if $RayCast2D.is_colliding():
+			var collider = $RayCast2D.get_collider()
+			if collider: 
+				if "Dx" in collider.name:
+					indicators(get_parent().ind2)
+					levdx.playing = true
+					levmaj(levdx, 105)
+				elif "Sx" in collider.name:
+					indicators(get_parent().ind1)
+					levsx.playing = true
+					levmin(levsx, -75)
+		if check == 1 and labsx.position.x < 340:
+			speed = Vector2(5,0)
+		if check == 2 and labdx.position.x > 740:
+			speed = Vector2(-5,0)
+		if labsx.position.x <= 130:
+			choice = 1
+			speed = Vector2(-20,0)
+			get_node("../").audio.play_effects("slide")
+			labdx.move_and_collide(Vector2(0, 10)*delta*100)
+		if labdx.position.x >= 950:
+			choice = 2
+			speed = Vector2(20,0)
+			get_node("../").audio.play_effects("slide")
+			labsx.move_and_collide(Vector2(0, 10)*delta*100)
+		if position.y >= 1500:
+			levsx.playing = false
+			levsx.frame = 0
+			levdx.playing = false
+			levdx.frame = 0
+			speed = Vector2()
+			if get_parent().pathstr == "0":
+				reload(0, get_parent().data, str(choice), 2)
+			else:
+				for i in ending.keys():
+					if ending[i] is String:
+						if get_parent().pathstr + str(choice) == ending[i]:
+							reload(0, get_parent().data, i, 1)
+							end = true
+							break
+					elif ending[i] is Array:
+						for j in ending[i]:
+							if get_parent().pathstr + str(choice) == j:
+								reload(0, get_parent().data, i, 1)
+								end = true
+								break
+				if end == false:
+					if get_parent().data["Risp2"][get_parent().pathstr + str(choice)] != "":
+						reload(0, get_parent().data, get_parent().pathstr + str(choice), 2)
+					else:
+						reload(0, get_parent().data, get_parent().pathstr + str(choice), 1)
+		move_and_collide(speed*delta*100)
+
+
+func reload(zero, one, two, three):
+	
+	stopdrag = InputEventMouseButton.new()
+	stopdrag.set_button_index(1)
+	stopdrag.set_pressed(false)
+	Input.parse_input_event(stopdrag)
+	
+	params[0] = zero
+	params[1] = one
+	params[2] = two
+	params[3] = three
+	if three == 1:
+		labsx.position = Vector2(1260,1800)
+		labdx.position = Vector2(1660,1800)
+		get_node("../BetweenRisp").position = Vector2(1460, 1800)
+		get_node("../Risposta").position = Vector2(540, 1800)
+	else:
+		labsx.position = Vector2(340,1800)
+		labdx.position = Vector2(740, 1800)
+		get_node("../BetweenRisp").position = Vector2(540, 1800)
+	hideind()
+	get_parent().restart(params)
+
+
+func indicators(index):
+	if index[1] == "1": 
+		get_node("../BoxIndicatori/HeartEmpty/HPoint").scale = Vector2(1.5, 1.5)
+		get_node("../BoxIndicatori/HeartEmpty/HPoint").show()
+	elif index[1] == "2":
+		get_node("../BoxIndicatori/HeartEmpty/HPoint").scale = Vector2(2.5, 2.5)
+		get_node("../BoxIndicatori/HeartEmpty/HPoint").show()
+	if index[4] == "1": 
+		get_node("../BoxIndicatori/BrainEmpty/BPoint").scale = Vector2(1.5, 1.5)
+		get_node("../BoxIndicatori/BrainEmpty/BPoint").show()
+	elif index[4] == "2":
+		get_node("../BoxIndicatori/BrainEmpty/BPoint").scale = Vector2(2.5, 2.5)
+		get_node("../BoxIndicatori/BrainEmpty/BPoint").show()
+	if index[7] == "1": 
+		get_node("../BoxIndicatori/MoneyEmpty/MPoint").scale = Vector2(1.5, 1.5)
+		get_node("../BoxIndicatori/MoneyEmpty/MPoint").show()
+	elif index[7] == "2":
+		get_node("../BoxIndicatori/MoneyEmpty/MPoint").scale = Vector2(2.5, 2.5)
+		get_node("../BoxIndicatori/MoneyEmpty/MPoint").show()
+
+	
+func hideind():
+	get_node("../BoxIndicatori/HeartEmpty/HPoint").hide()
+	get_node("../BoxIndicatori/BrainEmpty/BPoint").hide()
+	get_node("../BoxIndicatori/MoneyEmpty/MPoint").hide()
+
+func setbonmal(ifpath1, ifpath2, dpath1, dpath2, dpath3, text1, text2):
+	if ifpath1.texture != null:
+		if ifpath1.texture.resource_path == ifpath2:
+			dpath1.set_texture(load(ifpath2))
+			dpath2.text = text1
+			dpath3.text = text2
+	else:
+		dpath1.set_texture(null)
+		dpath2.text = ""
+		dpath3.text = ""
+
+func levmaj(lev, cap):
+	lev.rotation_degrees += 5
+	if lev.rotation_degrees >= cap: 
+		lev.rotation_degrees = cap
+		
+func levmin(lev, cap):
+	lev.rotation_degrees -= 5
+	if lev.rotation_degrees <= cap: 
+		lev.rotation_degrees = cap
+
+
+func _on_Risposta1_gui_input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			check = 0
+		if event.pressed == false: 
+			check = 1
+	if event is InputEventScreenDrag:
+		if event.speed.x > 0: $RayCast2D.cast_to.x = 170
+		else: $RayCast2D.cast_to.x = -170
+		var speed = Vector2(event.speed.x,0)
+		move_and_collide(speed*2*delt)
+
+
+
+func _on_Risposta2_gui_input(event):
+	
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			check = 0
+		if event.pressed == false: 
+			check = 2
+	if event is InputEventScreenDrag:
+		if event.speed.x > 0: $RayCast2D.cast_to.x = 170
+		else: $RayCast2D.cast_to.x = -170
+		var speed = Vector2(event.speed.x,0)
+		move_and_collide(speed*2*delt)
+
+
+func _on_Info_gui_input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			infostart = 1
+
+
+func _on_Indietro_gui_input(event):
+	if event is InputEventScreenTouch:
+		if event.pressed:
+			infostart = 2

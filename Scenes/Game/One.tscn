@@ -1,0 +1,1551 @@
+[gd_scene load_steps=82 format=2]
+
+[ext_resource path="res://Utility/Background.jpg" type="Texture" id=1]
+[ext_resource path="res://Utility/Fade-Out.tres" type="Animation" id=2]
+[ext_resource path="res://Scenes/Game/One.gd" type="Script" id=3]
+[ext_resource path="res://Scenes/Game/Indicatori/BrainFull.png" type="Texture" id=4]
+[ext_resource path="res://Utility/BoxNeon.png" type="Texture" id=5]
+[ext_resource path="res://Scenes/Game/Indicatori/BrainEmpty.png" type="Texture" id=6]
+[ext_resource path="res://Scenes/Game/Indicatori/MoneyFull.png" type="Texture" id=7]
+[ext_resource path="res://Utility/Lever(Act).png" type="Texture" id=8]
+[ext_resource path="res://Scenes/Game/Indicatori/HeartEmpty.png" type="Texture" id=9]
+[ext_resource path="res://Scenes/Game/Indicatori/HeartFull.png" type="Texture" id=10]
+[ext_resource path="res://Scenes/Game/Indicatori/MoneyEmpty.png" type="Texture" id=11]
+[ext_resource path="res://Fonts/RobotoCondensed-Regular.ttf" type="DynamicFontData" id=12]
+[ext_resource path="res://Fonts/RobotoCondensed-Bold.ttf" type="DynamicFontData" id=13]
+[ext_resource path="res://Utility/BoxQNeonPink.png" type="Texture" id=14]
+[ext_resource path="res://Utility/BoxQNeonBlu.png" type="Texture" id=15]
+[ext_resource path="res://Utility/RUth.tres" type="Theme" id=16]
+[ext_resource path="res://Scenes/Game/Indicatori/Malus(1).png" type="Texture" id=17]
+[ext_resource path="res://Scenes/Game/Indicatori/Bonus(0).png" type="Texture" id=18]
+[ext_resource path="res://Scenes/Game/Indicatori/Bonus(1).png" type="Texture" id=19]
+[ext_resource path="res://Scenes/Game/SlideRisp.gd" type="Script" id=20]
+[ext_resource path="res://Utility/SlideSx.png" type="Texture" id=21]
+[ext_resource path="res://Scenes/Game/Indicatori/Malus(0).png" type="Texture" id=22]
+[ext_resource path="res://Utility/Info(Up).png" type="Texture" id=23]
+[ext_resource path="res://Utility/Info(Down).png" type="Texture" id=24]
+[ext_resource path="res://Utility/Info(Hover).png" type="Texture" id=25]
+[ext_resource path="res://Scenes/Game/Indicatori/Point.png" type="Texture" id=26]
+[ext_resource path="res://Utility/Arrow.png" type="Texture" id=27]
+[ext_resource path="res://Utility/BoxQNeonBlu(BG).png" type="Texture" id=28]
+[ext_resource path="res://Utility/Lever.png" type="Texture" id=29]
+[ext_resource path="res://Scenes/Game/Indicatori/White.png" type="Texture" id=30]
+[ext_resource path="res://Scenes/Game/SlideRisp2.gd" type="Script" id=31]
+[ext_resource path="res://Utility/Fade-In.tres" type="Animation" id=32]
+[ext_resource path="res://Utility/MusicOff.png" type="Texture" id=33]
+[ext_resource path="res://Utility/EffectOff.png" type="Texture" id=34]
+[ext_resource path="res://Utility/MusicOn.png" type="Texture" id=35]
+[ext_resource path="res://Utility/EffectOn.png" type="Texture" id=36]
+
+[sub_resource type="SpriteFrames" id=1]
+animations = [ {
+"frames": [ ExtResource( 22 ), ExtResource( 17 ) ],
+"loop": true,
+"name": "Start",
+"speed": 3.0
+} ]
+
+[sub_resource type="SpriteFrames" id=2]
+animations = [ {
+"frames": [ ExtResource( 18 ), ExtResource( 19 ) ],
+"loop": true,
+"name": "Start",
+"speed": 3.0
+} ]
+
+[sub_resource type="SpriteFrames" id=3]
+animations = [ {
+"frames": [ ExtResource( 22 ), ExtResource( 17 ) ],
+"loop": true,
+"name": "Start",
+"speed": 3.0
+} ]
+
+[sub_resource type="SpriteFrames" id=4]
+animations = [ {
+"frames": [ ExtResource( 18 ), ExtResource( 19 ) ],
+"loop": true,
+"name": "Start",
+"speed": 3.0
+} ]
+
+[sub_resource type="SpriteFrames" id=5]
+animations = [ {
+"frames": [ ExtResource( 22 ), ExtResource( 17 ) ],
+"loop": true,
+"name": "Start",
+"speed": 3.0
+} ]
+
+[sub_resource type="SpriteFrames" id=6]
+animations = [ {
+"frames": [ ExtResource( 18 ), ExtResource( 19 ) ],
+"loop": true,
+"name": "Start",
+"speed": 3.0
+} ]
+
+[sub_resource type="StyleBoxFlat" id=7]
+content_margin_left = 30.0
+content_margin_right = 30.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color( 0.694118, 0.894118, 1, 1 )
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color( 0, 0.207843, 0.513726, 1 )
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="RectangleShape2D" id=8]
+extents = Vector2( 545.21, 15.5928 )
+
+[sub_resource type="StyleBoxFlat" id=9]
+content_margin_left = 30.0
+content_margin_right = 30.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color( 0.694118, 0.894118, 1, 1 )
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color( 0, 0.207843, 0.513726, 1 )
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="DynamicFont" id=10]
+size = 40
+outline_size = 1
+font_data = ExtResource( 13 )
+
+[sub_resource type="RectangleShape2D" id=11]
+extents = Vector2( 164, 116 )
+
+[sub_resource type="StyleBoxFlat" id=12]
+content_margin_left = 30.0
+content_margin_right = 30.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color( 0.694118, 0.894118, 1, 1 )
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color( 0, 0.207843, 0.513726, 1 )
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="DynamicFont" id=13]
+size = 40
+outline_size = 1
+font_data = ExtResource( 13 )
+
+[sub_resource type="RectangleShape2D" id=14]
+extents = Vector2( 164, 116 )
+
+[sub_resource type="RectangleShape2D" id=15]
+extents = Vector2( 36, 116 )
+
+[sub_resource type="DynamicFont" id=16]
+size = 120
+font_data = ExtResource( 13 )
+
+[sub_resource type="DynamicFont" id=17]
+size = 80
+font_data = ExtResource( 12 )
+
+[sub_resource type="SpriteFrames" id=18]
+animations = [ {
+"frames": [ ExtResource( 29 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "Active",
+"speed": 5.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=19]
+radius = 20.5073
+height = 164.059
+
+[sub_resource type="SpriteFrames" id=20]
+animations = [ {
+"frames": [ ExtResource( 29 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "Active",
+"speed": 5.0
+} ]
+
+[sub_resource type="CapsuleShape2D" id=21]
+radius = 20.5128
+height = 169.574
+
+[sub_resource type="StyleBoxFlat" id=22]
+content_margin_left = 30.0
+content_margin_right = 30.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color( 0.694118, 0.894118, 1, 1 )
+border_width_left = 30
+border_width_top = 30
+border_width_right = 30
+border_width_bottom = 30
+border_color = Color( 0, 0.207843, 0.513726, 1 )
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="StyleBoxFlat" id=23]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color( 0.694118, 0.894118, 1, 1 )
+border_width_left = 20
+border_width_top = 20
+border_width_right = 20
+border_width_bottom = 20
+border_color = Color( 0.368627, 0.592157, 0.921569, 1 )
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="DynamicFont" id=24]
+size = 80
+outline_size = 1
+font_data = ExtResource( 13 )
+
+[sub_resource type="DynamicFont" id=25]
+size = 52
+outline_size = 1
+extra_spacing_top = 5
+extra_spacing_bottom = 5
+extra_spacing_char = 1
+extra_spacing_space = 1
+font_data = ExtResource( 13 )
+
+[sub_resource type="SpriteFrames" id=26]
+animations = [ {
+"frames": [  ],
+"loop": true,
+"name": "Fail",
+"speed": 2.0
+} ]
+
+[sub_resource type="SpriteFrames" id=27]
+animations = [ {
+"frames": [  ],
+"loop": true,
+"name": "Fail",
+"speed": 2.0
+} ]
+
+[sub_resource type="StyleBoxFlat" id=28]
+content_margin_left = 0.0
+content_margin_right = 0.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color( 0.133333, 0.678431, 1, 1 )
+border_width_left = 20
+border_width_top = 20
+border_width_right = 20
+border_width_bottom = 20
+border_color = Color( 0.368627, 0.592157, 0.921569, 1 )
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="StyleBoxFlat" id=29]
+content_margin_left = 0.0
+content_margin_right = 0.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color( 0, 0.556863, 1, 1 )
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color( 0.368627, 0.592157, 0.921569, 1 )
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="StyleBoxFlat" id=30]
+content_margin_left = 0.0
+content_margin_right = 0.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color( 0.435294, 0.803922, 1, 1 )
+border_width_left = 20
+border_width_top = 20
+border_width_right = 20
+border_width_bottom = 20
+border_color = Color( 0.368627, 0.592157, 0.921569, 1 )
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="DynamicFont" id=31]
+size = 55
+outline_size = 3
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 12 )
+
+[sub_resource type="DynamicFont" id=32]
+size = 55
+outline_size = 3
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 12 )
+
+[sub_resource type="StyleBoxFlat" id=33]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 35.0
+content_margin_bottom = 0.0
+bg_color = Color( 0.694118, 0.894118, 1, 1 )
+border_width_left = 20
+border_width_top = 20
+border_width_right = 20
+border_width_bottom = 20
+border_color = Color( 0.368627, 0.592157, 0.921569, 1 )
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="DynamicFont" id=34]
+size = 80
+outline_size = 1
+font_data = ExtResource( 13 )
+
+[sub_resource type="StyleBoxEmpty" id=35]
+
+[sub_resource type="DynamicFont" id=36]
+size = 51
+outline_size = 1
+font_data = ExtResource( 13 )
+
+[sub_resource type="DynamicFont" id=37]
+size = 80
+outline_size = 1
+font_data = ExtResource( 13 )
+
+[sub_resource type="StyleBoxEmpty" id=38]
+
+[sub_resource type="DynamicFont" id=39]
+size = 51
+outline_size = 1
+font_data = ExtResource( 13 )
+
+[sub_resource type="StyleBoxEmpty" id=40]
+
+[sub_resource type="DynamicFont" id=41]
+size = 40
+outline_size = 1
+font_data = ExtResource( 13 )
+
+[sub_resource type="StyleBoxFlat" id=42]
+content_margin_left = 10.0
+content_margin_right = 10.0
+content_margin_top = 0.0
+content_margin_bottom = 0.0
+bg_color = Color( 0.694118, 0.894118, 1, 1 )
+border_width_left = 20
+border_width_top = 20
+border_width_right = 20
+border_width_bottom = 20
+border_color = Color( 0.0117647, 0.305882, 0.741176, 1 )
+border_blend = true
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="DynamicFont" id=43]
+size = 60
+outline_size = 1
+font_data = ExtResource( 13 )
+
+[sub_resource type="StyleBoxEmpty" id=44]
+
+[sub_resource type="DynamicFont" id=45]
+size = 40
+outline_size = 1
+font_data = ExtResource( 13 )
+
+[node name="One" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Background" type="Sprite" parent="."]
+position = Vector2( 540, 960 )
+scale = Vector2( 1.6875, 1.68717 )
+texture = ExtResource( 1 )
+
+[node name="Effects" type="TextureButton" parent="."]
+margin_left = 968.0
+margin_top = 352.0
+margin_right = 1048.0
+margin_bottom = 432.0
+focus_mode = 0
+toggle_mode = true
+enabled_focus_mode = 0
+texture_normal = ExtResource( 36 )
+texture_pressed = ExtResource( 34 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Music" type="TextureButton" parent="."]
+margin_left = 968.0
+margin_top = 472.0
+margin_right = 1048.0
+margin_bottom = 552.0
+focus_mode = 0
+toggle_mode = true
+enabled_focus_mode = 0
+texture_normal = ExtResource( 35 )
+texture_pressed = ExtResource( 33 )
+expand = true
+
+[node name="BoxIndicatori" type="NinePatchRect" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -540.0
+margin_right = 540.0
+margin_bottom = 336.0
+texture = ExtResource( 5 )
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="HeartEmpty" type="Sprite" parent="BoxIndicatori"]
+position = Vector2( 230, 191 )
+scale = Vector2( 0.265, 0.265 )
+texture = ExtResource( 9 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="HFull" type="Sprite" parent="BoxIndicatori/HeartEmpty"]
+light_mask = 1024
+texture = ExtResource( 10 )
+
+[node name="KBH" type="KinematicBody2D" parent="BoxIndicatori/HeartEmpty"]
+position = Vector2( 0, -252 )
+input_pickable = true
+
+[node name="Mask" type="Light2D" parent="BoxIndicatori/HeartEmpty/KBH"]
+scale = Vector2( 1, 0.744 )
+texture = ExtResource( 30 )
+texture_scale = 4.8
+color = Color( 1, 1, 1, 0 )
+mode = 3
+range_item_cull_mask = 1024
+
+[node name="HMalus" type="AnimatedSprite" parent="BoxIndicatori/HeartEmpty"]
+visible = false
+position = Vector2( 530, 0 )
+scale = Vector2( 1.5, 1.5 )
+frames = SubResource( 1 )
+animation = "Start"
+playing = true
+
+[node name="HBonus" type="AnimatedSprite" parent="BoxIndicatori/HeartEmpty"]
+visible = false
+position = Vector2( 530, 0 )
+scale = Vector2( 1.5, 1.5 )
+frames = SubResource( 2 )
+animation = "Start"
+playing = true
+
+[node name="HPoint" type="Sprite" parent="BoxIndicatori/HeartEmpty"]
+visible = false
+position = Vector2( 0, -470 )
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 26 )
+
+[node name="BrainEmpty" type="Sprite" parent="BoxIndicatori"]
+position = Vector2( 540, 191 )
+scale = Vector2( 0.265, 0.265 )
+texture = ExtResource( 6 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="BFull" type="Sprite" parent="BoxIndicatori/BrainEmpty"]
+light_mask = 1024
+position = Vector2( -6.10352e-05, -6.10352e-05 )
+texture = ExtResource( 4 )
+
+[node name="KBB" type="KinematicBody2D" parent="BoxIndicatori/BrainEmpty"]
+position = Vector2( 0, -315 )
+
+[node name="Mask" type="Light2D" parent="BoxIndicatori/BrainEmpty/KBB"]
+position = Vector2( 0, 0.000305176 )
+scale = Vector2( 1, 0.940097 )
+texture = ExtResource( 30 )
+texture_scale = 4.8
+color = Color( 1, 1, 1, 0 )
+mode = 3
+range_item_cull_mask = 1024
+
+[node name="BMalus" type="AnimatedSprite" parent="BoxIndicatori/BrainEmpty"]
+visible = false
+position = Vector2( 530, 0 )
+scale = Vector2( 1.5, 1.5 )
+frames = SubResource( 3 )
+animation = "Start"
+frame = 1
+playing = true
+
+[node name="BBonus" type="AnimatedSprite" parent="BoxIndicatori/BrainEmpty"]
+visible = false
+position = Vector2( 530, 0 )
+scale = Vector2( 1.5, 1.5 )
+frames = SubResource( 4 )
+animation = "Start"
+playing = true
+
+[node name="BPoint" type="Sprite" parent="BoxIndicatori/BrainEmpty"]
+visible = false
+position = Vector2( 0, -470 )
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 26 )
+
+[node name="MoneyEmpty" type="Sprite" parent="BoxIndicatori"]
+position = Vector2( 850, 191 )
+scale = Vector2( 0.265, 0.265 )
+texture = ExtResource( 11 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="MFull" type="Sprite" parent="BoxIndicatori/MoneyEmpty"]
+light_mask = 1024
+texture = ExtResource( 7 )
+
+[node name="MMalus" type="AnimatedSprite" parent="BoxIndicatori/MoneyEmpty"]
+visible = false
+position = Vector2( 530, 0 )
+scale = Vector2( 1.5, 1.5 )
+frames = SubResource( 5 )
+animation = "Start"
+playing = true
+
+[node name="MBonus" type="AnimatedSprite" parent="BoxIndicatori/MoneyEmpty"]
+visible = false
+position = Vector2( 530, 0 )
+scale = Vector2( 1.5, 1.5 )
+frames = SubResource( 6 )
+animation = "Start"
+frame = 1
+playing = true
+
+[node name="MPoint" type="Sprite" parent="BoxIndicatori/MoneyEmpty"]
+visible = false
+position = Vector2( 0, -470 )
+scale = Vector2( 1.5, 1.5 )
+texture = ExtResource( 26 )
+
+[node name="KBM" type="KinematicBody2D" parent="BoxIndicatori/MoneyEmpty"]
+position = Vector2( 0, -325 )
+input_pickable = true
+
+[node name="Mask" type="Light2D" parent="BoxIndicatori/MoneyEmpty/KBM"]
+texture = ExtResource( 30 )
+texture_scale = 4.8
+color = Color( 1, 1, 1, 0 )
+mode = 3
+range_item_cull_mask = 1024
+
+[node name="Domanda" type="Label" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -508.0
+margin_top = -216.0
+margin_right = 508.0
+margin_bottom = 200.0
+theme = ExtResource( 16 )
+align = 1
+valign = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Info" type="TextureButton" parent="Domanda"]
+visible = false
+margin_left = 920.0
+margin_top = 320.0
+margin_right = 992.0
+margin_bottom = 392.0
+focus_mode = 0
+enabled_focus_mode = 0
+texture_normal = ExtResource( 23 )
+texture_pressed = ExtResource( 24 )
+texture_hover = ExtResource( 25 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Risposta" type="KinematicBody2D" parent="."]
+position = Vector2( 540, 1800 )
+input_pickable = true
+script = ExtResource( 20 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Risposta" type="Label" parent="Risposta"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -356.0
+margin_top = -124.0
+margin_right = 356.0
+margin_bottom = 124.0
+rect_pivot_offset = Vector2( 356, 124 )
+mouse_filter = 0
+theme = ExtResource( 16 )
+custom_styles/normal = SubResource( 7 )
+align = 1
+valign = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Slide" type="Sprite" parent="Risposta/Risposta"]
+visible = false
+position = Vector2( 356, 256 )
+scale = Vector2( 0.3125, 0.3125 )
+texture = ExtResource( 21 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Risposta"]
+scale = Vector2( 0.638286, -7.50348 )
+shape = SubResource( 8 )
+
+[node name="RayCast2D" type="RayCast2D" parent="Risposta"]
+position = Vector2( 0, -1.00012 )
+enabled = true
+cast_to = Vector2( -350, 120 )
+collide_with_areas = true
+
+[node name="SideStand" type="Timer" parent="Risposta"]
+one_shot = true
+
+[node name="CenterStand" type="Timer" parent="Risposta"]
+one_shot = true
+
+[node name="Risposta1" type="KinematicBody2D" parent="."]
+position = Vector2( 1260, 1800 )
+input_pickable = true
+script = ExtResource( 31 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Risposta1" type="Label" parent="Risposta1"]
+margin_left = -170.0
+margin_top = -124.0
+margin_right = 170.0
+margin_bottom = 124.0
+rect_pivot_offset = Vector2( 170, 124 )
+mouse_filter = 0
+theme = ExtResource( 16 )
+custom_styles/normal = SubResource( 9 )
+custom_fonts/font = SubResource( 10 )
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Risposta1"]
+shape = SubResource( 11 )
+
+[node name="RayCast2D" type="RayCast2D" parent="Risposta1"]
+enabled = true
+cast_to = Vector2( -165, 120 )
+
+[node name="Risposta2" type="KinematicBody2D" parent="."]
+position = Vector2( 1660, 1800 )
+input_pickable = true
+script = ExtResource( 31 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Risposta2" type="Label" parent="Risposta2"]
+margin_left = -170.0
+margin_top = -124.0
+margin_right = 170.0
+margin_bottom = 124.0
+rect_pivot_offset = Vector2( 170, 124 )
+mouse_filter = 0
+theme = ExtResource( 16 )
+custom_styles/normal = SubResource( 12 )
+custom_fonts/font = SubResource( 13 )
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Risposta2"]
+shape = SubResource( 14 )
+
+[node name="RayCast2D" type="RayCast2D" parent="Risposta2"]
+enabled = true
+cast_to = Vector2( 165, 120 )
+
+[node name="BetweenRisp" type="StaticBody2D" parent="."]
+position = Vector2( 1460, 1800 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BetweenRisp"]
+scale = Vector2( 0.97, 1 )
+shape = SubResource( 15 )
+
+[node name="BoxBonus" type="NinePatchRect" parent="."]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -540.0
+margin_top = -320.0
+margin_right = 540.0
+texture = ExtResource( 5 )
+patch_margin_left = 20
+patch_margin_top = 20
+patch_margin_right = 20
+patch_margin_bottom = 20
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="Bonus1" type="NinePatchRect" parent="BoxBonus"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -540.0
+margin_top = -50.0
+margin_right = -440.0
+margin_bottom = 50.0
+mouse_filter = 0
+texture = ExtResource( 15 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bonus2" type="NinePatchRect" parent="BoxBonus"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -420.0
+margin_top = -50.0
+margin_right = -320.0
+margin_bottom = 50.0
+mouse_filter = 0
+texture = ExtResource( 14 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bonus3" type="NinePatchRect" parent="BoxBonus"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -300.0
+margin_top = -50.0
+margin_right = -200.0
+margin_bottom = 50.0
+mouse_filter = 0
+texture = ExtResource( 15 )
+
+[node name="Bonus4" type="NinePatchRect" parent="BoxBonus"]
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -180.0
+margin_top = -50.0
+margin_right = -79.9999
+margin_bottom = 50.0
+mouse_filter = 0
+texture = ExtResource( 14 )
+
+[node name="Anni" type="Label" parent="BoxBonus"]
+margin_left = 80.0
+margin_top = 48.0
+margin_right = 480.0
+margin_bottom = 198.0
+custom_fonts/font = SubResource( 16 )
+text = "20 ANNI"
+align = 2
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Mesi" type="Label" parent="BoxBonus"]
+margin_left = 80.0
+margin_top = 176.0
+margin_right = 480.0
+margin_bottom = 271.0
+custom_fonts/font = SubResource( 17 )
+text = "0 Mesi"
+align = 2
+
+[node name="Active1" type="Sprite" parent="BoxBonus"]
+position = Vector2( 590, 160 )
+scale = Vector2( 0.19, 0.19 )
+
+[node name="Active2" type="Sprite" parent="BoxBonus"]
+position = Vector2( 710, 160 )
+scale = Vector2( 0.19, 0.19 )
+
+[node name="TimerText" type="Timer" parent="."]
+one_shot = true
+
+[node name="BoxAvatar" type="TextureRect" parent="."]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -200.0
+margin_top = -588.0
+margin_right = 200.0
+margin_bottom = -188.0
+rect_pivot_offset = Vector2( 200, 200 )
+expand = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Container" type="Container" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+mouse_filter = 2
+__meta__ = {
+"_edit_group_": true,
+"_edit_use_anchors_": false
+}
+
+[node name="LeverDx" type="AnimatedSprite" parent="Container"]
+position = Vector2( 1000, 1465 )
+rotation = 0.261799
+scale = Vector2( 0.3901, 0.3901 )
+frames = SubResource( 18 )
+animation = "Active"
+offset = Vector2( -10, -60 )
+
+[node name="LeverDx" type="StaticBody2D" parent="Container/LeverDx"]
+position = Vector2( -3448.08, -2964.01 )
+rotation = -0.261799
+scale = Vector2( 2.56344, 2.56344 )
+
+[node name="CollisionShape" type="CollisionShape2D" parent="Container/LeverDx/LeverDx"]
+position = Vector2( 999.903, 1440 )
+scale = Vector2( 0.3901, 0.3901 )
+shape = SubResource( 19 )
+
+[node name="Timer1" type="Timer" parent="Container/LeverDx"]
+one_shot = true
+
+[node name="LeverSx" type="AnimatedSprite" parent="Container"]
+position = Vector2( 79.9999, 1464 )
+rotation = 0.261799
+scale = Vector2( 0.39, 0.39 )
+frames = SubResource( 20 )
+animation = "Active"
+offset = Vector2( -10, -60 )
+
+[node name="LeverSx" type="StaticBody2D" parent="Container/LeverSx"]
+position = Vector2( -1169.71, -3572.85 )
+rotation = -0.261799
+scale = Vector2( 2.5641, 2.5641 )
+input_pickable = true
+
+[node name="CollisionShape2" type="CollisionShape2D" parent="Container/LeverSx/LeverSx"]
+position = Vector2( 80.002, 1440 )
+rotation = 1.91041e-08
+scale = Vector2( 0.39, 0.39 )
+shape = SubResource( 21 )
+
+[node name="Timer2" type="Timer" parent="Container/LeverSx"]
+one_shot = true
+
+[node name="Feedback" type="KinematicBody2D" parent="."]
+position = Vector2( -1040, 0 )
+input_pickable = true
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Feedback" type="Label" parent="Feedback"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = 55.0
+margin_top = 60.0
+margin_right = 1025.0
+margin_bottom = 1860.0
+rect_pivot_offset = Vector2( 485, 900 )
+theme = ExtResource( 16 )
+custom_styles/normal = SubResource( 22 )
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Result" type="Label" parent="Feedback/Feedback" groups=[
+"Final",
+]]
+visible = false
+margin_left = 60.0
+margin_top = 60.0
+margin_right = 910.0
+margin_bottom = 200.0
+rect_pivot_offset = Vector2( 425, 70 )
+theme = ExtResource( 16 )
+custom_styles/normal = SubResource( 23 )
+custom_fonts/font = SubResource( 24 )
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="Label" parent="Feedback/Feedback" groups=[
+"Final",
+]]
+visible = false
+margin_left = 60.0
+margin_top = 440.0
+margin_right = 910.0
+margin_bottom = 580.0
+rect_pivot_offset = Vector2( 425, 70 )
+theme = ExtResource( 16 )
+custom_styles/normal = SubResource( 23 )
+custom_fonts/font = SubResource( 24 )
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Age" type="Label" parent="Feedback/Feedback" groups=[
+"Final",
+]]
+visible = false
+margin_left = 60.0
+margin_top = 600.0
+margin_right = 910.0
+margin_bottom = 880.0
+rect_pivot_offset = Vector2( 425, 140 )
+theme = ExtResource( 16 )
+custom_styles/normal = SubResource( 23 )
+custom_fonts/font = SubResource( 24 )
+align = 1
+valign = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bias" type="Label" parent="Feedback/Feedback" groups=[
+"Final",
+]]
+visible = false
+margin_left = 60.0
+margin_top = 900.0
+margin_right = 910.0
+margin_bottom = 1040.0
+rect_pivot_offset = Vector2( 425, 330 )
+theme = ExtResource( 16 )
+custom_styles/normal = SubResource( 23 )
+custom_fonts/font = SubResource( 25 )
+align = 1
+valign = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Ind1" type="AnimatedSprite" parent="Feedback/Feedback" groups=[
+"Final",
+]]
+visible = false
+position = Vector2( 330, 320 )
+scale = Vector2( 0.265, 0.265 )
+frames = SubResource( 26 )
+animation = "Fail"
+
+[node name="Ind2" type="AnimatedSprite" parent="Feedback/Feedback" groups=[
+"Final",
+]]
+visible = false
+position = Vector2( 650, 320 )
+scale = Vector2( 0.265, 0.265 )
+frames = SubResource( 27 )
+animation = "Fail"
+
+[node name="NewGame" type="Button" parent="Feedback/Feedback" groups=[
+"Final",
+]]
+visible = false
+margin_left = 60.0
+margin_top = 1588.0
+margin_right = 460.0
+margin_bottom = 1756.0
+rect_pivot_offset = Vector2( 200, 84 )
+focus_mode = 0
+custom_styles/hover = SubResource( 28 )
+custom_styles/pressed = SubResource( 29 )
+custom_styles/normal = SubResource( 30 )
+custom_fonts/font = SubResource( 31 )
+enabled_focus_mode = 0
+text = "Nuova Partita"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Menu" type="Button" parent="Feedback/Feedback" groups=[
+"Final",
+]]
+visible = false
+margin_left = 513.0
+margin_top = 1588.0
+margin_right = 913.0
+margin_bottom = 1756.0
+rect_pivot_offset = Vector2( 200, 84 )
+focus_mode = 0
+theme = ExtResource( 16 )
+custom_styles/hover = SubResource( 28 )
+custom_styles/pressed = SubResource( 29 )
+custom_styles/normal = SubResource( 30 )
+custom_fonts/font = SubResource( 32 )
+enabled_focus_mode = 0
+text = "Menù Principale"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="IntSem" type="Label" parent="Feedback/Feedback" groups=[
+"Int",
+]]
+visible = false
+margin_left = 60.0
+margin_top = 76.0
+margin_right = 910.0
+margin_bottom = 796.0
+rect_pivot_offset = Vector2( 425, 330 )
+theme = ExtResource( 16 )
+custom_styles/normal = SubResource( 33 )
+custom_fonts/font = SubResource( 34 )
+text = "INTERESSE SEMPLICE"
+align = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Descr1" type="Label" parent="Feedback/Feedback/IntSem" groups=[
+"Int",
+]]
+visible = false
+margin_left = 28.9999
+margin_top = 124.0
+margin_right = 819.0
+margin_bottom = 674.0
+rect_pivot_offset = Vector2( 395, 275 )
+custom_styles/normal = SubResource( 35 )
+custom_fonts/font = SubResource( 36 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "L'interesse semplice è una quota calcolata periodicamente, in termini percentuali, su un capitale iniziale, senza tener conto di evenutali ulteriori interessi già maturati.
+Es. Un interesse semplice del 5% Annuo su 100, garantisce 110 dopo due anni (5% su 100 + 5% su 100)"
+align = 1
+valign = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="IntCom" type="Label" parent="Feedback/Feedback" groups=[
+"Int",
+]]
+visible = false
+margin_left = 60.0
+margin_top = 836.0
+margin_right = 910.0
+margin_bottom = 1556.0
+rect_pivot_offset = Vector2( 425, 330 )
+theme = ExtResource( 16 )
+custom_styles/normal = SubResource( 33 )
+custom_fonts/font = SubResource( 37 )
+text = "INTERESSE COMPOSTO"
+align = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Descr2" type="Label" parent="Feedback/Feedback/IntCom" groups=[
+"Int",
+]]
+visible = false
+margin_left = 28.9999
+margin_top = 124.0
+margin_right = 819.0
+margin_bottom = 674.0
+rect_pivot_offset = Vector2( 395, 275 )
+custom_styles/normal = SubResource( 38 )
+custom_fonts/font = SubResource( 39 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "L'interesse composto è una quota calcolata periodicamente, in termini percentuali, su un capitale iniziale e su evenutali ulteriori interessi già maturati.
+Es. Un interesse composto del 5% Annuo su 100, garantisce 110,25 dopo due anni (5% su 100 + 5% su 105)"
+align = 1
+valign = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Back" type="Sprite" parent="Feedback/Feedback" groups=[
+"Int",
+]]
+visible = false
+position = Vector2( 137, 1669 )
+texture = ExtResource( 27 )
+
+[node name="Indietro" type="Label" parent="Feedback/Feedback/Back" groups=[
+"Int",
+]]
+visible = false
+margin_left = -72.0
+margin_top = -28.0
+margin_right = 248.0
+margin_bottom = 27.0
+rect_pivot_offset = Vector2( 160, 27.5 )
+mouse_filter = 0
+custom_styles/normal = SubResource( 40 )
+custom_fonts/font = SubResource( 41 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "INDIETRO"
+align = 2
+valign = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="BonMal" type="Label" parent="Feedback/Feedback" groups=[
+"BonusMalus",
+]]
+visible = false
+margin_left = 60.0
+margin_top = 60.0
+margin_right = 910.0
+margin_bottom = 200.0
+rect_pivot_offset = Vector2( 425, 70 )
+theme = ExtResource( 16 )
+custom_styles/normal = SubResource( 42 )
+custom_fonts/font = SubResource( 24 )
+text = "BONUS E MALUS"
+align = 1
+valign = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bon1" type="Label" parent="Feedback/Feedback" groups=[
+"BonusMalus",
+]]
+visible = false
+margin_left = 60.0
+margin_top = 220.0
+margin_right = 910.0
+margin_bottom = 550.0
+rect_pivot_offset = Vector2( 425, 165 )
+theme = ExtResource( 16 )
+custom_styles/normal = SubResource( 23 )
+custom_fonts/font = SubResource( 24 )
+align = 1
+valign = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TitleBon1" type="Label" parent="Feedback/Feedback/Bon1" groups=[
+"BonusMalus",
+]]
+visible = false
+margin_left = 173.0
+margin_top = 63.0
+margin_right = 605.0
+margin_bottom = 134.0
+rect_pivot_offset = Vector2( 216, 27.5 )
+mouse_filter = 0
+custom_styles/normal = SubResource( 40 )
+custom_fonts/font = SubResource( 43 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bonus1" type="NinePatchRect" parent="Feedback/Feedback/Bon1" groups=[
+"BonusMalus",
+]]
+visible = false
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -805.0
+margin_top = -117.0
+margin_right = -705.0
+margin_bottom = -17.0
+texture = ExtResource( 28 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Descr1" type="Label" parent="Feedback/Feedback/Bon1" groups=[
+"BonusMalus",
+]]
+visible = false
+margin_left = 29.0
+margin_top = 150.0
+margin_right = 819.0
+margin_bottom = 310.0
+rect_pivot_offset = Vector2( 395, 80 )
+custom_styles/normal = SubResource( 44 )
+custom_fonts/font = SubResource( 45 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Active1" type="Sprite" parent="Feedback/Feedback/Bon1" groups=[
+"BonusMalus",
+]]
+visible = false
+position = Vector2( 95.4001, 98.1954 )
+scale = Vector2( 0.203, 0.198 )
+
+[node name="Bon2" type="Label" parent="Feedback/Feedback" groups=[
+"BonusMalus",
+]]
+visible = false
+margin_left = 60.0
+margin_top = 572.0
+margin_right = 910.0
+margin_bottom = 902.0
+rect_pivot_offset = Vector2( 425, 165 )
+theme = ExtResource( 16 )
+custom_styles/normal = SubResource( 23 )
+custom_fonts/font = SubResource( 24 )
+align = 1
+valign = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TitleBon2" type="Label" parent="Feedback/Feedback/Bon2" groups=[
+"BonusMalus",
+]]
+visible = false
+margin_left = 173.0
+margin_top = 63.0
+margin_right = 605.0
+margin_bottom = 134.0
+rect_pivot_offset = Vector2( 216, 27.5 )
+mouse_filter = 0
+custom_styles/normal = SubResource( 40 )
+custom_fonts/font = SubResource( 43 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+valign = 1
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bonus2" type="NinePatchRect" parent="Feedback/Feedback/Bon2" groups=[
+"BonusMalus",
+]]
+visible = false
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -805.0
+margin_top = -117.0
+margin_right = -705.0
+margin_bottom = -17.0
+texture = ExtResource( 28 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Descr2" type="Label" parent="Feedback/Feedback/Bon2" groups=[
+"BonusMalus",
+]]
+visible = false
+margin_left = 29.0
+margin_top = 150.0
+margin_right = 819.0
+margin_bottom = 310.0
+rect_pivot_offset = Vector2( 395, 80 )
+custom_styles/normal = SubResource( 44 )
+custom_fonts/font = SubResource( 45 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+align = 1
+valign = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Active2" type="Sprite" parent="Feedback/Feedback/Bon2" groups=[
+"BonusMalus",
+]]
+visible = false
+position = Vector2( 95.4001, 98.1954 )
+scale = Vector2( 0.203, 0.198 )
+
+[node name="Bon3" type="Label" parent="Feedback/Feedback" groups=[
+"BonusMalus",
+]]
+visible = false
+margin_left = 60.0
+margin_top = 924.0
+margin_right = 910.0
+margin_bottom = 1254.0
+rect_pivot_offset = Vector2( 425, 165 )
+theme = ExtResource( 16 )
+custom_styles/normal = SubResource( 23 )
+custom_fonts/font = SubResource( 24 )
+align = 1
+valign = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bon4" type="Label" parent="Feedback/Feedback" groups=[
+"BonusMalus",
+]]
+visible = false
+margin_left = 60.0
+margin_top = 1276.0
+margin_right = 910.0
+margin_bottom = 1606.0
+rect_pivot_offset = Vector2( 425, 165 )
+theme = ExtResource( 16 )
+custom_styles/normal = SubResource( 23 )
+custom_fonts/font = SubResource( 24 )
+align = 1
+valign = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TitleBon3" type="Label" parent="Feedback/Feedback" groups=[
+"BonusMalus",
+]]
+visible = false
+margin_left = 233.0
+margin_top = 987.0
+margin_right = 665.0
+margin_bottom = 1058.0
+rect_pivot_offset = Vector2( 216, 27.5 )
+mouse_filter = 0
+custom_styles/normal = SubResource( 40 )
+custom_fonts/font = SubResource( 43 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+valign = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TitleBon4" type="Label" parent="Feedback/Feedback" groups=[
+"BonusMalus",
+]]
+visible = false
+margin_left = 233.0
+margin_top = 1339.0
+margin_right = 665.0
+margin_bottom = 1410.0
+rect_pivot_offset = Vector2( 216, 27.5 )
+mouse_filter = 0
+custom_styles/normal = SubResource( 40 )
+custom_fonts/font = SubResource( 43 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+valign = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bonus3" type="NinePatchRect" parent="Feedback/Feedback" groups=[
+"BonusMalus",
+]]
+visible = false
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -865.0
+margin_top = 72.0
+margin_right = -765.0
+margin_bottom = 172.0
+texture = ExtResource( 28 )
+
+[node name="Bonus4" type="NinePatchRect" parent="Feedback/Feedback" groups=[
+"BonusMalus",
+]]
+visible = false
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_left = -865.0
+margin_top = 424.0
+margin_right = -765.0
+margin_bottom = 524.0
+texture = ExtResource( 28 )
+
+[node name="Back2" type="Sprite" parent="Feedback/Feedback" groups=[
+"BonusMalus",
+]]
+visible = false
+position = Vector2( 137, 1693 )
+texture = ExtResource( 27 )
+
+[node name="Indietro2" type="Label" parent="Feedback/Feedback/Back2" groups=[
+"BonusMalus",
+]]
+visible = false
+margin_left = -72.0
+margin_top = -28.0
+margin_right = 248.0
+margin_bottom = 27.0
+rect_pivot_offset = Vector2( 160, 27.5 )
+mouse_filter = 0
+custom_styles/normal = SubResource( 40 )
+custom_fonts/font = SubResource( 41 )
+custom_colors/font_color = Color( 0, 0, 0, 1 )
+text = "INDIETRO"
+align = 2
+valign = 1
+autowrap = true
+percent_visible = 0.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Rect" type="CanvasLayer" parent="."]
+layer = 2
+
+[node name="ColorRect" type="ColorRect" parent="Rect"]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Rect/ColorRect"]
+anims/Fade-In = ExtResource( 32 )
+anims/Fade-Out = ExtResource( 2 )
+[connection signal="toggled" from="Effects" to="." method="_on_Effects_toggled"]
+[connection signal="toggled" from="Music" to="." method="_on_Music_toggled"]
+[connection signal="gui_input" from="Domanda/Info" to="Risposta1" method="_on_Info_gui_input"]
+[connection signal="gui_input" from="Risposta/Risposta" to="Risposta" method="_on_Risposta_gui_input"]
+[connection signal="gui_input" from="Risposta1/Risposta1" to="Risposta1" method="_on_Risposta1_gui_input"]
+[connection signal="gui_input" from="Risposta2/Risposta2" to="Risposta2" method="_on_Risposta2_gui_input"]
+[connection signal="gui_input" from="BoxBonus/Bonus1" to="." method="_on_Bonus1_gui_input"]
+[connection signal="gui_input" from="BoxBonus/Bonus2" to="." method="_on_Bonus2_gui_input"]
+[connection signal="gui_input" from="BoxBonus/Bonus3" to="." method="_on_Bonus3_gui_input"]
+[connection signal="gui_input" from="BoxBonus/Bonus4" to="." method="_on_Bonus4_gui_input"]
+[connection signal="gui_input" from="Feedback/Feedback/NewGame" to="." method="_on_NewGame_gui_input"]
+[connection signal="gui_input" from="Feedback/Feedback/Menu" to="." method="_on_Menu_gui_input"]
+[connection signal="gui_input" from="Feedback/Feedback/Back/Indietro" to="Risposta1" method="_on_Indietro_gui_input"]
+[connection signal="gui_input" from="Feedback/Feedback/Back2/Indietro2" to="." method="_on_Indietro2_gui_input"]
+[connection signal="animation_finished" from="Rect/ColorRect/AnimationPlayer" to="." method="_on_AnimationPlayer_animation_finished"]

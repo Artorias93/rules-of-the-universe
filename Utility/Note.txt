@@ -1,0 +1,12 @@
+Livelli Max Indicatori:
+	- Heart = -505
+	- Brain = -570
+	- Money = -650
+
+Coord Risposte:
+	- Risp1 = 340, 1332
+	- Risp2 = 740, 1332
+	- Between = 540, 1332
+	- Risp = 540, 1332
+
+
